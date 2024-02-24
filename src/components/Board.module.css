@@ -1,0 +1,32 @@
+.fila{
+    display: flex;
+    height: 100%;
+}
+.board{
+    display: flex;
+    flex-direction: column;
+    background-color: rgb(55, 60, 60);
+    width:500px;
+    height: 500px;
+}
+.square{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+.square.white{
+    background-color: #e9edcc;
+}
+.square.black{
+    background-color: #779954;
+}
+span img {
+    cursor: pointer;
+    width: 45px;
+    height: 45px;
+}
+.available{
+    
+}
