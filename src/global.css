@@ -25,11 +25,15 @@ main{
   display: flex;
   align-items: center;
   flex-direction: column;
+  justify-content: center;
   height: 100%;
   width: 100%;
 }
-
 button{
+  cursor: pointer;
+  border: none;
+}
+.toogleGameButton{
   background-color: #51772b;
   border: none;
   border-radius: 8px;
@@ -39,6 +43,22 @@ button{
   cursor: pointer;
   transition: all .7s ease;
 }
-button:hover{
+.toogleGameButton:hover{
   background-color: #649335;
+}
+.availableSquareButton{
+  background-color: rgba(14, 14, 14, 0.509);
+  padding: 10px;
+  border-radius: 50%;
+  z-index: 20;
+}
+.attackableSquareButton{
+  position: absolute;
+  padding: 24px;
+  background-color: transparent;
+  border: 3px solid rgba(91, 90, 90, 0.405);
+  border-radius: 50%;
+  z-index: 20;
+  display: flex;
+  align-items: center;
 }

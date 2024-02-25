@@ -4,16 +4,15 @@ import styles from "./Board.module.css";
 import { BoardContext } from "../context/board";
 
 export default function Board() {
-    const { board } = useContext(BoardContext);
+    const {board} = useContext(BoardContext);
 
     return (
         <section className={styles.board}>
             {board.map((fila, filaIndex) => (
                 <div key={filaIndex} className={styles.fila}>
-                    {fila.map((piece, columnaIndex) => (
+                    {fila.map((cellInfo, columnaIndex) => (
                         <Square
-                            piece={piece && piece.piece}
-                            team={piece  && piece.team}
+                            cellInfo={cellInfo}
                             key={columnaIndex}
                             filaIndex={filaIndex}
                             columnaIndex={columnaIndex}

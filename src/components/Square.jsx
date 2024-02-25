@@ -1,31 +1,25 @@
-import { useEffect, useState, lazy, Suspense } from "react";
-import styles from "./Board.module.css";
+/* eslint-disable react/prop-types */
+import {Suspense} from "react";
+import useSquare from "./hooks/useSquare";
+import Button from "./Button"
+import { BoardContext } from "../context/board";
+import { useContext } from "react";
+export default function Square({cellInfo,filaIndex, columnaIndex, color}) {
+  const {classAdditional, team, piece} = cellInfo
+  const {combinedClasses,DynamicComponent,availableSquare, attackableSquare, onSelect} = useSquare(classAdditional,piece,color,filaIndex, columnaIndex, team)
+  const {handleMove,selectedPiece} =  useContext(BoardContext)
 
-export default function Square({ piece,team, filaIndex, columnaIndex, color}) {
-  const [DynamicComponent, setDynamicComponent] = useState(null);
-  useEffect(() => {
-    if (piece) {
-      const pieceToRender = lazy(() => import(`./pieces/${piece}`));
-      setDynamicComponent(pieceToRender);
-    }
-    else{
-        setDynamicComponent(null)
-    }
-  }, [piece]);
-
-
-  const squareClass = styles.square;
-  const colorClass = color === "white" ? styles.white : styles.black;
-
-  const combinedClasses = `${squareClass} ${colorClass}`;
-
-  function handleClick(){
-    console.log("Soy el Square de la fila:", filaIndex, " y columna", columnaIndex)
+  function onMove(){
+    console.log(selectedPiece)
+    handleMove(filaIndex,columnaIndex)
   }
+
   return (
-    <Suspense fallback="..">
-      <div className={combinedClasses} onClick={handleClick}>
+    <Suspense>
+      <div className={combinedClasses} onClick={onSelect}>
         {DynamicComponent && <DynamicComponent team={team} filaIndex={filaIndex} columnaIndex={columnaIndex}/>}
+        {availableSquare && <Button handleClick={onMove} className="availableSquareButton"></Button>}
+        {attackableSquare && <Button handleClick={onMove} className="attackableSquareButton"></Button>}
       </div>
     </Suspense>
   );

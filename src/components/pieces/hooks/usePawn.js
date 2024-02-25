@@ -1,15 +1,40 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import { BoardContext } from "../../../context/board";
 
-export default function usePawn (){
-    const {board} = useContext(BoardContext)
-    
-    function showMovements (actualFilaIndex,actualColumnaIndex) {
-        if(!board[actualFilaIndex-1][actualColumnaIndex]){
-            console.log("Entro")
-            board[actualFilaIndex - 1][actualColumnaIndex] = { class: "available" };
-            console.log(board[actualFilaIndex -1][actualColumnaIndex])
+export default function usePawn(actualColumnaIndex, actualFilaIndex, team) {
+    const { updateBoard,resetAvailableMovements} = useContext(BoardContext)
+
+    function showMovements() { 
+        const resetedBoard = resetAvailableMovements()
+            if (team === "White") {
+                let positionToEvaluate = resetedBoard[actualFilaIndex -1][actualColumnaIndex]
+                if (positionToEvaluate && positionToEvaluate.piece === undefined) {
+                    resetedBoard[actualFilaIndex - 1][actualColumnaIndex].classAdditional = "available";
+                }
+                positionToEvaluate = resetedBoard[actualFilaIndex-1][actualColumnaIndex+1]
+                if (positionToEvaluate && positionToEvaluate.piece && positionToEvaluate.team !== "White"){
+                    resetedBoard[actualFilaIndex-1][actualColumnaIndex+1].classAdditional = "attackable"
+                }
+                positionToEvaluate = resetedBoard[actualFilaIndex-1][actualColumnaIndex-1]
+                if (positionToEvaluate && positionToEvaluate.piece && positionToEvaluate.team !== "White"){
+                    resetedBoard[actualFilaIndex-1][actualColumnaIndex-1].classAdditional = "attackable"
+                }
+            }
+            if (team === "Black") {
+                let positionToEvaluate = resetedBoard[actualFilaIndex + 1][actualColumnaIndex]
+                if (positionToEvaluate && positionToEvaluate.piece === undefined) {
+                    resetedBoard[actualFilaIndex + 1][actualColumnaIndex].classAdditional = "available";
+                }
+                positionToEvaluate = resetedBoard[actualFilaIndex+1][actualColumnaIndex+1]
+                if (positionToEvaluate && positionToEvaluate.piece && positionToEvaluate.team !== "Black"){
+                    resetedBoard[actualFilaIndex+1][actualColumnaIndex+1].classAdditional = "attackable"
+                }
+                positionToEvaluate = resetedBoard[actualFilaIndex+1][actualColumnaIndex-1]
+                if (positionToEvaluate && positionToEvaluate.piece && positionToEvaluate.team !== "Black"){
+                    resetedBoard[actualFilaIndex+1][actualColumnaIndex-1].classAdditional = "attackable"
+                }
+            }
+            updateBoard(resetedBoard);
         }
-    }
-    return{showMovements}
+    return { showMovements }
 }
