@@ -2,11 +2,15 @@ import { BoardContext } from "../../context/board";
 import styles from "../Board.module.css"
 import { useState, useEffect, lazy, useContext } from "react";
 export default function useSquare(classAdditional, piece, color, filaIndex, columnaIndex, team) {
-    const {handlePieceSelect, turn} = useContext(BoardContext)
+    const { handlePieceSelect, turn, selectedPiece} = useContext(BoardContext)
+    const colorClass = color === "white" ? styles.white : styles.black;
 
     const [DynamicComponent, setDynamicComponent] = useState(null);
 
+    const [combinedClass, setCombinedClass] = useState(`${styles.square} ${colorClass} ${classAdditional}`)
+
     const [availableSquare, setAvailableSquare] = useState(false)
+
     const [attackableSquare, setAttackableSquare] = useState(false)
 
     useEffect(() => {
@@ -22,19 +26,21 @@ export default function useSquare(classAdditional, piece, color, filaIndex, colu
     useEffect(() => {
         if (classAdditional === "available") setAvailableSquare(true);
         else setAvailableSquare(false);
-        if(classAdditional === "attackable") setAttackableSquare(true)
+        if (classAdditional === "attackable") setAttackableSquare(true)
         else setAttackableSquare(false)
     }, [classAdditional]);
 
-    const squareClass = styles.square;
-
-    const colorClass = color === "white" ? styles.white : styles.black;
-
-    const combinedClasses = `${squareClass} ${colorClass} ${classAdditional}`;
+    useEffect(()=>{
+        if(selectedPiece === `${filaIndex}-${columnaIndex}`){
+            setCombinedClass(`${styles.square} ${colorClass} ${classAdditional} ${styles.activeSquare}`)
+        }
+        else setCombinedClass(`${styles.square} ${colorClass} ${classAdditional}`)
+    },
+    [selectedPiece])
 
     function onSelect() {
-        if(turn === team)
-        handlePieceSelect(columnaIndex, filaIndex)
+        if (turn === team)
+            handlePieceSelect(columnaIndex, filaIndex)
     }
-    return { combinedClasses, DynamicComponent, availableSquare, onSelect, attackableSquare}
+    return { combinedClass, DynamicComponent, availableSquare, onSelect, attackableSquare }
 }

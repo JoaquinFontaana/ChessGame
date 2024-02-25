@@ -3,6 +3,7 @@ import { BoardContext } from "../../../context/board";
 
 export default function usePawn(actualColumnaIndex, actualFilaIndex, team) {
     const { updateBoard,resetAvailableMovements} = useContext(BoardContext)
+    const [firstMove, setFirstMove] = useState(true)
 
     function showMovements() { 
         const resetedBoard = resetAvailableMovements()
@@ -36,5 +37,5 @@ export default function usePawn(actualColumnaIndex, actualFilaIndex, team) {
             }
             updateBoard(resetedBoard);
         }
-    return { showMovements }
+    return { showMovements, firstMove}
 }

@@ -22,7 +22,9 @@
 .square.black{
     background-color: #779954;
 }
-
+.square.activeSquare{
+    background-color: #bbcc43;
+}
 span img {
     cursor: pointer;
     width: 45px;

@@ -6,7 +6,7 @@ import { BoardContext } from "../context/board";
 import { useContext } from "react";
 export default function Square({cellInfo,filaIndex, columnaIndex, color}) {
   const {classAdditional, team, piece} = cellInfo
-  const {combinedClasses,DynamicComponent,availableSquare, attackableSquare, onSelect} = useSquare(classAdditional,piece,color,filaIndex, columnaIndex, team)
+  const {combinedClass,DynamicComponent,availableSquare, attackableSquare, onSelect} = useSquare(classAdditional,piece,color,filaIndex, columnaIndex, team)
   const {handleMove,selectedPiece} =  useContext(BoardContext)
 
   function onMove(){
@@ -16,7 +16,7 @@ export default function Square({cellInfo,filaIndex, columnaIndex, color}) {
 
   return (
     <Suspense>
-      <div className={combinedClasses} onClick={onSelect}>
+      <div className={combinedClass} onClick={onSelect}>
         {DynamicComponent && <DynamicComponent team={team} filaIndex={filaIndex} columnaIndex={columnaIndex}/>}
         {availableSquare && <Button handleClick={onMove} className="availableSquareButton"></Button>}
         {attackableSquare && <Button handleClick={onMove} className="attackableSquareButton"></Button>}
