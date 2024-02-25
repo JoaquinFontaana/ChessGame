@@ -6,8 +6,8 @@
     display: flex;
     flex-direction: column;
     background-color: rgb(55, 60, 60);
-    width:450px;
-    height: 450px;
+    width:480px;
+    height: 480px;
 }
 .square{
     height: 100%;
