@@ -4,13 +4,13 @@ import useSquare from "./hooks/useSquare";
 import Button from "./Button"
 import { BoardContext } from "../context/board";
 import { useContext } from "react";
+import usePawn from "./pieces/hooks/usePawn";
 export default function Square({cellInfo,filaIndex, columnaIndex, color}) {
   const {classAdditional, team, piece} = cellInfo
   const {combinedClass,DynamicComponent,availableSquare, attackableSquare, onSelect} = useSquare(classAdditional,piece,color,filaIndex, columnaIndex, team)
-  const {handleMove,selectedPiece} =  useContext(BoardContext)
+  const {handleMove} =  useContext(BoardContext)
 
   function onMove(){
-    console.log(selectedPiece)
     handleMove(filaIndex,columnaIndex)
   }
 

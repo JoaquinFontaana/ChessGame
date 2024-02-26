@@ -22,7 +22,6 @@ export function BoardProvider({ children }) {
         }
     }
 
-
     function handlePieceSelect(columnaIndex, filaIndex) {
         if (board[filaIndex][columnaIndex].piece) {
             const location = `${filaIndex}-${columnaIndex}`
@@ -38,24 +37,30 @@ export function BoardProvider({ children }) {
     }
     function handleMove(toFilaIndex, toColumnaIndex) {
         //Actualizar turno
-        setSelectedPiece(null)
         if(turn === TURNS.white) setTurn(TURNS.black)
         else setTurn(TURNS.white)
-
+        //Obtener fila y columa de la pieza seleccionada
         const [fila, columna] = selectedPiece.split("-");
-    
+        //Parsear fila y columna
         const filaIndex = parseInt(fila, 10);
         const columnaIndex = parseInt(columna, 10);
     
         const updatedBoard = [...board];
-        const pieceToMove = { ...updatedBoard[filaIndex][columnaIndex] };  // Copiar el objeto
-    
+
+        // Copiar el objeto
+        const pieceToMove = { ...updatedBoard[filaIndex][columnaIndex]};  
+
         // Actualiza la posición de la pieza en el nuevo lugar
         updatedBoard[toFilaIndex][toColumnaIndex] = pieceToMove;
-    
+
+        //Evaluar si es un peon, y actualizar la propiedad firstMove
+        if (pieceToMove.piece === "Pawn") {
+            updatedBoard[toFilaIndex][toColumnaIndex].firstMove = false;
+        }
         // Limpiar la posición anterior
         updatedBoard[filaIndex][columnaIndex] = {piece:undefined, team: undefined, classAdditional:""}
         setBoard(updatedBoard);
+        setSelectedPiece(null)
         resetAvailableMovements()
     }
     return (

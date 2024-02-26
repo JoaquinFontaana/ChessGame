@@ -1,9 +1,8 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext} from "react";
 import { BoardContext } from "../../../context/board";
 
 export default function usePawn(actualColumnaIndex, actualFilaIndex, team) {
     const { updateBoard,resetAvailableMovements} = useContext(BoardContext)
-    const [firstMove, setFirstMove] = useState(true)
 
     function showMovements() { 
         const resetedBoard = resetAvailableMovements()
@@ -11,6 +10,12 @@ export default function usePawn(actualColumnaIndex, actualFilaIndex, team) {
                 let positionToEvaluate = resetedBoard[actualFilaIndex -1][actualColumnaIndex]
                 if (positionToEvaluate && positionToEvaluate.piece === undefined) {
                     resetedBoard[actualFilaIndex - 1][actualColumnaIndex].classAdditional = "available";
+                    if(resetedBoard[actualFilaIndex][actualColumnaIndex].firstMove){
+                        let positionToEvaluate = resetedBoard[actualFilaIndex -2][actualColumnaIndex]
+                        if (positionToEvaluate && positionToEvaluate.piece === undefined) {
+                            resetedBoard[actualFilaIndex - 2][actualColumnaIndex].classAdditional = "available";
+                        }
+                    }
                 }
                 positionToEvaluate = resetedBoard[actualFilaIndex-1][actualColumnaIndex+1]
                 if (positionToEvaluate && positionToEvaluate.piece && positionToEvaluate.team !== "White"){
@@ -25,6 +30,12 @@ export default function usePawn(actualColumnaIndex, actualFilaIndex, team) {
                 let positionToEvaluate = resetedBoard[actualFilaIndex + 1][actualColumnaIndex]
                 if (positionToEvaluate && positionToEvaluate.piece === undefined) {
                     resetedBoard[actualFilaIndex + 1][actualColumnaIndex].classAdditional = "available";
+                    if(resetedBoard[actualFilaIndex][actualColumnaIndex].firstMove){
+                        let positionToEvaluate = resetedBoard[actualFilaIndex +2][actualColumnaIndex]
+                        if (positionToEvaluate && positionToEvaluate.piece === undefined) {
+                            resetedBoard[actualFilaIndex + 2][actualColumnaIndex].classAdditional = "available";
+                        }
+                    }
                 }
                 positionToEvaluate = resetedBoard[actualFilaIndex+1][actualColumnaIndex+1]
                 if (positionToEvaluate && positionToEvaluate.piece && positionToEvaluate.team !== "Black"){
@@ -37,5 +48,5 @@ export default function usePawn(actualColumnaIndex, actualFilaIndex, team) {
             }
             updateBoard(resetedBoard);
         }
-    return { showMovements, firstMove}
+    return { showMovements}
 }

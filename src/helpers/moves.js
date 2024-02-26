@@ -1,4 +1,5 @@
 export default function moves(filaIndex, columnaIndex, team, board){
+
     function verticalHorizontalMoves(){
         let i = filaIndex+1
         let y = columnaIndex
@@ -69,6 +70,7 @@ export default function moves(filaIndex, columnaIndex, team, board){
             y--
         }
     }
+    
     function diagonalMoves(){
         let enemyPiece = false
         let i = filaIndex - 1
@@ -150,7 +152,36 @@ export default function moves(filaIndex, columnaIndex, team, board){
                 i++
                 y--
             }
-            return board
+        }
+        function knightMoves(){
+            const moves = [
+                { fila: -2, columna: -1 },
+                { fila: -2, columna: 1 },
+                { fila: -1, columna: -2 },
+                { fila: -1, columna: 2 },
+                { fila: 1, columna: -2 },
+                { fila: 1, columna: 2 },
+                { fila: 2, columna: -1 },
+                { fila: 2, columna: 1 },
+            ];
+        
+            // Verificar cada movimiento posible
+            moves.forEach(posiciones => {
+                const {fila, columna} = posiciones
+                const i = filaIndex + fila;
+                const y = columnaIndex + columna;
+                // Verificar si la posición está dentro del tablero
+                if (i >= 0 &&
+                    i < board.length &&
+                    y >= 0 &&
+                    y < board[0].length){
+                    // Verificar si la posición está vacía o tiene una pieza del equipo contrario
+                    if (board[i][y].team !== team) {
+                        // Asignar la clase según si está vacía o tiene una pieza para atacar
+                        board[i][y].classAdditional = board[i][y].piece ? "attackable" : "available";
+                    }
+                }
+            })
     }
-    return{verticalHorizontalMoves,diagonalMoves}
+    return{verticalHorizontalMoves,diagonalMoves, knightMoves}
 }
