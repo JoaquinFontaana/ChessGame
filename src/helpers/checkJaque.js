@@ -1,80 +1,113 @@
-export default function moves(filaIndex, columnaIndex, team, board) {
+import { useContext, useEffect, useState } from "react"
+import { BoardContext } from "../context/board"
 
-    function verticalHorizontalMoves() {
+export default function useCheckJaque(filaIndex, columnaIndex, team, board) {
+    const [jaque, setJaque] = useState(false)
+    const { whiteKingPosition, turn } = useContext(BoardContext)
+    useEffect(() => {
+        if (turn && turn === "White") {
+            const { whiteKingFila, whiteKingColumna } = whiteKingPosition
+            if (board && board[whiteKingFila][whiteKingColumna].classAdditional === "threatenedKing") {
+                setJaque(true)
+                console.log("Deteccion de jaque para king blanco")
+            }
+            else setJaque(false)
+        }
+    }, [turn])
+
+    function rookMoves() {
         let i = filaIndex + 1
         let y = columnaIndex
+        let king = false
         let enemyPiece = false
         while (
             i >= 0 &&
             i < board.length &&
             board[i][y] &&
             board[i][y].team !== team
+            && !king
             && !enemyPiece
         ) {
-            if (board[i][y].piece === undefined) board[i][y].classAdditional = "available"
+            if (board[i][y].piece === undefined) board[i][y].classAdditional = "threatened"
+            else if (board[i][y].piece === "King" && board[i][y].team !== team) {
+                board[i][y].classAdditional = "threatenedKing"
+                king = true
+            }
             else if (board[i][y].piece && board[i][y].team !== team) {
-                board[i][y].classAdditional = "attackable"
                 enemyPiece = true
             }
             i++
         }
         i = filaIndex - 1
         y = columnaIndex
+        king = false
         enemyPiece = false
         while (
             i >= 0 &&
             i < board.length &&
             board[i][y] &&
             board[i][y].team !== team
-            && !enemyPiece
+            && !king
         ) {
-            if (board[i][y].piece === undefined) board[i][y].classAdditional = "available"
+            if (board[i][y].piece === undefined) board[i][y].classAdditional = "threatened"
+            else if (board[i][y].piece === "King" && board[i][y].team !== team) {
+                board[i][y].classAdditional = "threatenedKing"
+                king = true
+            }
             else if (board[i][y].piece && board[i][y].team !== team) {
-                board[i][y].classAdditional = "attackable"
                 enemyPiece = true
             }
             i--
         }
         i = filaIndex
         y = columnaIndex + 1
+        king = false
         enemyPiece = false
         while (
             y >= 0 &&
             y < board.length &&
             board[i][y] &&
             board[i][y].team !== team
-            && !enemyPiece
+            && !king
         ) {
-            if (board[i][y].piece === undefined) board[i][y].classAdditional = "available"
+            if (board[i][y].piece === undefined) board[i][y].classAdditional = "threatened"
+            else if (board[i][y].piece === "King" && board[i][y].team !== team) {
+                board[i][y].classAdditional = "threatenedKing"
+                king = true
+            }
             else if (board[i][y].piece && board[i][y].team !== team) {
-                board[i][y].classAdditional = "attackable"
                 enemyPiece = true
             }
             y++
         }
         i = filaIndex
         y = columnaIndex - 1
+        king = false
         enemyPiece = false
         while (
             y >= 0 &&
             y < board.length &&
             board[i][y] &&
             board[i][y].team !== team
-            && !enemyPiece
+            && !king
         ) {
-            if (board[i][y].piece === undefined) board[i][y].classAdditional = "available"
+            if (board[i][y].piece === undefined) board[i][y].classAdditional = "threatened"
+            else if (board[i][y].piece === "King" && board[i][y].team !== team) {
+                board[i][y].classAdditional = "threatenedKing"
+                king = true
+            }
             else if (board[i][y].piece && board[i][y].team !== team) {
-                board[i][y].classAdditional = "attackable"
                 enemyPiece = true
             }
             y--
         }
     }
 
-    function diagonalMoves() {
-        let enemyPiece = false
+    function bishopMoves() {
+        let king = false
         let i = filaIndex - 1
         let y = columnaIndex + 1
+        let enemyPiece = false
         while (
             i >= 0 &&
             i < board.length &&
@@ -82,11 +115,14 @@ export default function moves(filaIndex, columnaIndex, team, board) {
             y < board[0].length &&
             board[i][y] &&
             board[i][y].team !== team
-            && !enemyPiece
+            && !king
         ) {
-            if (board[i][y].piece === undefined) board[i][y].classAdditional = "available"
+            if (board[i][y].piece === undefined) board[i][y].classAdditional = "threatened"
+            else if (board[i][y].piece === "King" && board[i][y].team !== team) {
+                board[i][y].classAdditional = "threatenedKing"
+                king = true
+            }
             else if (board[i][y].piece && board[i][y].team !== team) {
-                board[i][y].classAdditional = "attackable"
                 enemyPiece = true
             }
             i--
@@ -94,6 +130,7 @@ export default function moves(filaIndex, columnaIndex, team, board) {
         }
         i = filaIndex - 1
         y = columnaIndex - 1
+        king = false
         enemyPiece = false
         while (
             i >= 0 &&
@@ -102,19 +139,23 @@ export default function moves(filaIndex, columnaIndex, team, board) {
             y < board[0].length &&
             board[i][y] &&
             board[i][y].team !== team
-            && !enemyPiece
+            && !king
         ) {
-            if (board[i][y].piece === undefined) board[i][y].classAdditional = "available"
+            if (board[i][y].piece === undefined) board[i][y].classAdditional = "threatened"
+            else if (board[i][y].piece === "King" && board[i][y].team !== team) {
+                board[i][y].classAdditional = "threatenedKing"
+                king = true
+            }
             else if (board[i][y].piece && board[i][y].team !== team) {
-                board[i][y].classAdditional = "attackable"
                 enemyPiece = true
             }
             i--
             y--
         }
-        enemyPiece = false
+        king = false
         i = filaIndex + 1
         y = columnaIndex + 1
+        enemyPiece = false
         while (
             i >= 0 &&
             i < board.length &&
@@ -122,11 +163,14 @@ export default function moves(filaIndex, columnaIndex, team, board) {
             y < board[0].length &&
             board[i][y] &&
             board[i][y].team !== team
-            && !enemyPiece
+            && !king
         ) {
-            if (board[i][y].piece === undefined) board[i][y].classAdditional = "available"
+            if (board[i][y].piece === undefined) board[i][y].classAdditional = "threatened"
+            else if (board[i][y].piece === "King" && board[i][y].team !== team) {
+                board[i][y].classAdditional = "threatenedKing"
+                king = true
+            }
             else if (board[i][y].piece && board[i][y].team !== team) {
-                board[i][y].classAdditional = "attackable"
                 enemyPiece = true
             }
             i++
@@ -134,6 +178,7 @@ export default function moves(filaIndex, columnaIndex, team, board) {
         }
         i = filaIndex + 1
         y = columnaIndex - 1
+        king = false
         enemyPiece = false
         while (
             i >= 0 &&
@@ -142,36 +187,21 @@ export default function moves(filaIndex, columnaIndex, team, board) {
             y < board[0].length &&
             board[i][y] &&
             board[i][y].team !== team
+            && !king
             && !enemyPiece
         ) {
-            if (board[i][y].piece === undefined) board[i][y].classAdditional = "available"
+            if (board[i][y].piece === undefined) board[i][y].classAdditional = "threatened"
+            else if (board[i][y].piece === "King" && board[i][y].team !== team) {
+                board[i][y].classAdditional = "threatenedKing"
+                king = true
+            }
             else if (board[i][y].piece && board[i][y].team !== team) {
-                board[i][y].classAdditional = "attackable"
                 enemyPiece = true
             }
             i++
             y--
         }
     }
-    function kingMoves() {
-        console.log("funcion")
-        for (let a = -1; a < 2; a++) {
-            for (let b = -1; b < 2; b++) {
-                const i = filaIndex + a;
-                const y = columnaIndex + b;
-
-                if (board[i] && board[i][y]) {
-                    if (board[i][y].piece && board[i][y].team !== team) {
-                        board[i][y].classAdditional = "attackable";
-                    } else if (board[i][y].piece === undefined) {
-                        board[i][y].classAdditional = "available";
-                    }
-                }
-            }
-        }
-    }
-
-
     function knightMoves() {
         const moves = [
             { fila: -2, columna: -1 },
@@ -197,10 +227,16 @@ export default function moves(filaIndex, columnaIndex, team, board) {
                 // Verificar si la posición está vacía o tiene una pieza del equipo contrario
                 if (board[i][y].team !== team) {
                     // Asignar la clase según si está vacía o tiene una pieza para atacar
-                    board[i][y].classAdditional = board[i][y].piece ? "attackable" : "available";
+                    board[i][y].classAdditional = board[i][y].piece === "King" ? "threatenedKing" : "";
+                    board[i][y].classAdditional = board[i][y].piece === undefined ? "threatened" : "";
                 }
             }
         })
     }
-    return { verticalHorizontalMoves, diagonalMoves, knightMoves, kingMoves }
+
+    function queenMoves() {
+        rookMoves()
+        bishopMoves()
+    }
+    return { rookMoves, bishopMoves, knightMoves, queenMoves, jaque }
 }
