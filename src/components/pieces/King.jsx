@@ -13,7 +13,7 @@ export default function King({ team, filaIndex, columnaIndex }) {
     if (selectedPiece === `${filaIndex}-${columnaIndex}`) {
       showMovements();
     }
-  }, [selectedPiece, filaIndex, columnaIndex, showMovements]);
+  }, [selectedPiece]);
 
   return (
     <span>

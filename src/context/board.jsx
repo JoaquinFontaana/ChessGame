@@ -23,9 +23,6 @@ export function BoardProvider({ children }) {
             setBoard(BOARD);
         }
     }
-    useEffect(() => {
-        console.log(STARTEDBOARD)
-    }, [STARTEDBOARD])
     function handlePieceSelect(columnaIndex, filaIndex) {
         if (board[filaIndex][columnaIndex].piece) {
             const location = `${filaIndex}-${columnaIndex}`
@@ -78,7 +75,7 @@ export function BoardProvider({ children }) {
             updatedBoard[toFilaIndex][toColumnaIndex].firstMove = false;
         }
         if(pieceToMove.piece === "King"){
-            setWhiteKingPosition({filaIndex:toFilaIndex,columnaIndex:toColumnaIndex})
+            if(pieceToMove.team === TURNS.white) setWhiteKingPosition({filaIndex:toFilaIndex,columnaIndex:toColumnaIndex})
         }
         // Limpiar la posición anterior
         updatedBoard[filaIndex][columnaIndex] = { piece: undefined, team: undefined, classAdditional: "" }

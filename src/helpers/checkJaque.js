@@ -4,7 +4,7 @@ import { BoardContext } from "../context/board"
 export default function useCheckJaque(filaIndex, columnaIndex, team, board) {
     const [jaque, setJaque] = useState(false)
     const { whiteKingPosition, turn } = useContext(BoardContext)
-    useEffect(() => {
+    /*useEffect(() => {
         if (turn && turn === "White") {
             const { whiteKingFila, whiteKingColumna } = whiteKingPosition
             if (board && board[whiteKingFila][whiteKingColumna].classAdditional === "threatenedKing") {
@@ -13,7 +13,7 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, board) {
             }
             else setJaque(false)
         }
-    }, [turn])
+    }, [turn])*/
 
     function rookMoves() {
         let i = filaIndex + 1
