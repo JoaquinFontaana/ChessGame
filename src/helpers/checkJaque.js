@@ -3,7 +3,6 @@ import { BoardContext } from "../context/board"
 
 export default function useCheckJaque(filaIndex, columnaIndex, team, board) {
     const [jaque, setJaque] = useState(false)
-    const { whiteKingPosition, turn } = useContext(BoardContext)
     /*useEffect(() => {
         if (turn && turn === "White") {
             const { whiteKingFila, whiteKingColumna } = whiteKingPosition
@@ -15,7 +14,7 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, board) {
         }
     }, [turn])*/
 
-    function rookMoves() {
+    function rookJaqueMoves() {
         let i = filaIndex + 1
         let y = columnaIndex
         let king = false
@@ -101,9 +100,10 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, board) {
             }
             y--
         }
+        
     }
 
-    function bishopMoves() {
+    function bishopJaqueMoves() {
         let king = false
         let i = filaIndex - 1
         let y = columnaIndex + 1
@@ -201,9 +201,10 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, board) {
             i++
             y--
         }
+        
     }
-    function knightMoves() {
-        const moves = [
+    function knightJaqueMoves() {
+        const JaqueMoves = [
             { fila: -2, columna: -1 },
             { fila: -2, columna: 1 },
             { fila: -1, columna: -2 },
@@ -215,7 +216,7 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, board) {
         ];
 
         // Verificar cada movimiento posible
-        moves.forEach(posiciones => {
+        JaqueMoves.forEach(posiciones => {
             const { fila, columna } = posiciones
             const i = filaIndex + fila;
             const y = columnaIndex + columna;
@@ -232,11 +233,11 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, board) {
                 }
             }
         })
+        
     }
-
-    function queenMoves() {
-        rookMoves()
-        bishopMoves()
+    function queenJaqueMoves() {
+        rookJaqueMoves()
+        bishopJaqueMoves()
     }
-    return { rookMoves, bishopMoves, knightMoves, queenMoves, jaque }
+    return { rookJaqueMoves, bishopJaqueMoves, knightJaqueMoves, queenJaqueMoves, jaque }
 }

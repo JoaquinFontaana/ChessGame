@@ -3,11 +3,12 @@ import { BoardContext } from "../../../context/board";
 import moves from "../../../helpers/moves";
 import checkJaque from "../../../helpers/checkJaque"
 export default function useBishop(filaIndex, columnaIndex, team) {
-    const { resetAvailableMovements, updateBoard, board, turn} = useContext(BoardContext)
-    
-    const {bishopMoves} = checkJaque(filaIndex,columnaIndex,team,board)
+    const {resetAvailableMovements, updateBoard,board,turn} = useContext(BoardContext)
+    const boardToupdate = [...board]
+    const {bishopJaqueMoves}= checkJaque(filaIndex,columnaIndex,team,boardToupdate)
     useEffect(()=>{
-        if(turn !== null && team !== turn) bishopMoves()
+        bishopJaqueMoves()
+        updateBoard(boardToupdate)
     },[turn])
 
     function showMovements() {

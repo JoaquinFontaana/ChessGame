@@ -3,11 +3,13 @@ import { BoardContext } from "../../../context/board"
 import moves from "../../../helpers/moves"
 import checkjaque from "../../../helpers/checkJaque"
 export default function useKnight(filaIndex,columnaIndex,team){
-    const {resetAvailableMovements, updateBoard, board, turn} = useContext(BoardContext)
 
-    const {knightMoves} = checkjaque(filaIndex,columnaIndex,team,board)
+    const {resetAvailableMovements, updateBoard,board,turn} = useContext(BoardContext)
+    const boardToupdate = [...board]
+    const {knightJaqueMoves}= checkjaque(filaIndex,columnaIndex,team,boardToupdate)
     useEffect(()=>{
-        if(turn !== null && team !== turn) knightMoves()
+        knightJaqueMoves()
+        updateBoard(boardToupdate)
     },[turn])
 
     function showMovements(){
