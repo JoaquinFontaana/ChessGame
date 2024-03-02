@@ -154,7 +154,6 @@ export default function moves(filaIndex, columnaIndex, team, board) {
         }
     }
     function kingMoves() {
-        console.log("funcion")
         for (let a = -1; a < 2; a++) {
             for (let b = -1; b < 2; b++) {
                 const i = filaIndex + a;
@@ -202,5 +201,47 @@ export default function moves(filaIndex, columnaIndex, team, board) {
             }
         })
     }
-    return { verticalHorizontalMoves, diagonalMoves, knightMoves, kingMoves }
+    function pawnMoves(){
+        if (team === "White") {
+            let positionToEvaluate = board[filaIndex -1][columnaIndex]
+            if (positionToEvaluate && positionToEvaluate.piece === undefined) {
+                board[filaIndex - 1][columnaIndex].classAdditional = "available";
+                if(board[filaIndex][columnaIndex].firstMove){
+                    let positionToEvaluate = board[filaIndex -2][columnaIndex]
+                    if (positionToEvaluate && positionToEvaluate.piece === undefined) {
+                        board[filaIndex - 2][columnaIndex].classAdditional = "available";
+                    }
+                }
+            }
+            positionToEvaluate = board[filaIndex-1][columnaIndex+1]
+            if (positionToEvaluate && positionToEvaluate.piece && positionToEvaluate.team !== "White"){
+                board[filaIndex-1][columnaIndex+1].classAdditional = "attackable"
+            }
+            positionToEvaluate = board[filaIndex-1][columnaIndex-1]
+            if (positionToEvaluate && positionToEvaluate.piece && positionToEvaluate.team !== "White"){
+                board[filaIndex-1][columnaIndex-1].classAdditional = "attackable"
+            }
+        }
+        if (team === "Black") {
+            let positionToEvaluate = board[filaIndex + 1][columnaIndex]
+            if (positionToEvaluate && positionToEvaluate.piece === undefined) {
+                board[filaIndex + 1][columnaIndex].classAdditional = "available";
+                if(board[filaIndex][columnaIndex].firstMove){
+                    let positionToEvaluate = board[filaIndex +2][columnaIndex]
+                    if (positionToEvaluate && positionToEvaluate.piece === undefined) {
+                        board[filaIndex + 2][columnaIndex].classAdditional = "available";
+                    }
+                }
+            }
+            positionToEvaluate = board[filaIndex+1][columnaIndex+1]
+            if (positionToEvaluate && positionToEvaluate.piece && positionToEvaluate.team !== "Black"){
+                board[filaIndex+1][columnaIndex+1].classAdditional = "attackable"
+            }
+            positionToEvaluate = board[filaIndex+1][columnaIndex-1]
+            if (positionToEvaluate && positionToEvaluate.piece && positionToEvaluate.team !== "Black"){
+                board[filaIndex+1][columnaIndex-1].classAdditional = "attackable"
+            }
+        }
+    }
+    return { verticalHorizontalMoves, diagonalMoves, knightMoves, kingMoves,pawnMoves }
 }

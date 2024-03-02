@@ -1,4 +1,4 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect,useRef } from "react";
 import { BoardContext } from "../../../context/board";
 import moves from "../../../helpers/moves";
 import checkJaque from "../../../helpers/checkJaque"
@@ -6,10 +6,17 @@ export default function useBishop(filaIndex, columnaIndex, team) {
     const {resetAvailableMovements, updateBoard,board,turn} = useContext(BoardContext)
     const boardToupdate = [...board]
     const {bishopJaqueMoves}= checkJaque(filaIndex,columnaIndex,team,boardToupdate)
-    useEffect(()=>{
-        bishopJaqueMoves()
-        updateBoard(boardToupdate)
-    },[turn])
+    const isFirstRender= useRef(true)
+    useEffect(() => {
+        if(isFirstRender.current){
+            isFirstRender.current=false
+            return
+        }
+        else if (turn && turn !== team) {
+            bishopJaqueMoves()
+            updateBoard(boardToupdate)
+        }
+    }, [turn])
 
     function showMovements() {
         const resetedBoard = resetAvailableMovements()

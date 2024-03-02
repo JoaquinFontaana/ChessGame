@@ -1,52 +1,28 @@
-import { useContext} from "react";
+import { useContext, useEffect} from "react";
 import { BoardContext } from "../../../context/board";
+import moves from "../../../helpers/moves";
+import useCheckJaque from "../../../helpers/checkJaque";
+import { useRef } from "react";
+export default function usePawn(columnaIndex, filaIndex, team) {
+    const { updateBoard,resetAvailableMovements,turn,board} = useContext(BoardContext)
+    const boardToUpdate = [...board]
+    const {pawnJaqueMoves} = useCheckJaque(filaIndex,columnaIndex,team,boardToUpdate)
 
-export default function usePawn(actualColumnaIndex, actualFilaIndex, team) {
-    const { updateBoard,resetAvailableMovements} = useContext(BoardContext)
-
+    const isFirstRender = useRef(true);
+    useEffect(() => {
+        if (isFirstRender.current) {
+            isFirstRender.current = false;
+            return;
+        } else if (turn && turn !== team) {
+            pawnJaqueMoves();
+            updateBoard(boardToUpdate);
+        }
+    }, [turn]);
     function showMovements() { 
         const resetedBoard = resetAvailableMovements()
-            if (team === "White") {
-                let positionToEvaluate = resetedBoard[actualFilaIndex -1][actualColumnaIndex]
-                if (positionToEvaluate && positionToEvaluate.piece === undefined) {
-                    resetedBoard[actualFilaIndex - 1][actualColumnaIndex].classAdditional = "available";
-                    if(resetedBoard[actualFilaIndex][actualColumnaIndex].firstMove){
-                        let positionToEvaluate = resetedBoard[actualFilaIndex -2][actualColumnaIndex]
-                        if (positionToEvaluate && positionToEvaluate.piece === undefined) {
-                            resetedBoard[actualFilaIndex - 2][actualColumnaIndex].classAdditional = "available";
-                        }
-                    }
-                }
-                positionToEvaluate = resetedBoard[actualFilaIndex-1][actualColumnaIndex+1]
-                if (positionToEvaluate && positionToEvaluate.piece && positionToEvaluate.team !== "White"){
-                    resetedBoard[actualFilaIndex-1][actualColumnaIndex+1].classAdditional = "attackable"
-                }
-                positionToEvaluate = resetedBoard[actualFilaIndex-1][actualColumnaIndex-1]
-                if (positionToEvaluate && positionToEvaluate.piece && positionToEvaluate.team !== "White"){
-                    resetedBoard[actualFilaIndex-1][actualColumnaIndex-1].classAdditional = "attackable"
-                }
-            }
-            if (team === "Black") {
-                let positionToEvaluate = resetedBoard[actualFilaIndex + 1][actualColumnaIndex]
-                if (positionToEvaluate && positionToEvaluate.piece === undefined) {
-                    resetedBoard[actualFilaIndex + 1][actualColumnaIndex].classAdditional = "available";
-                    if(resetedBoard[actualFilaIndex][actualColumnaIndex].firstMove){
-                        let positionToEvaluate = resetedBoard[actualFilaIndex +2][actualColumnaIndex]
-                        if (positionToEvaluate && positionToEvaluate.piece === undefined) {
-                            resetedBoard[actualFilaIndex + 2][actualColumnaIndex].classAdditional = "available";
-                        }
-                    }
-                }
-                positionToEvaluate = resetedBoard[actualFilaIndex+1][actualColumnaIndex+1]
-                if (positionToEvaluate && positionToEvaluate.piece && positionToEvaluate.team !== "Black"){
-                    resetedBoard[actualFilaIndex+1][actualColumnaIndex+1].classAdditional = "attackable"
-                }
-                positionToEvaluate = resetedBoard[actualFilaIndex+1][actualColumnaIndex-1]
-                if (positionToEvaluate && positionToEvaluate.piece && positionToEvaluate.team !== "Black"){
-                    resetedBoard[actualFilaIndex+1][actualColumnaIndex-1].classAdditional = "attackable"
-                }
-            }
-            updateBoard(resetedBoard);
+        const {pawnMoves} = moves(filaIndex,columnaIndex,team,resetedBoard)
+        pawnMoves()
+        updateBoard(resetedBoard);
         }
     return { showMovements}
 }

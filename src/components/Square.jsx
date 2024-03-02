@@ -4,13 +4,21 @@ import useSquare from "./hooks/useSquare";
 import Button from "./Button"
 import { BoardContext } from "../context/board";
 import { useContext } from "react";
-import usePawn from "./pieces/hooks/usePawn";
+import { PiecesContext } from "../context/pieces";
+
 export default function Square({cellInfo,filaIndex, columnaIndex, color}) {
   const {classAdditional, team, piece} = cellInfo
   const {combinedClass,DynamicComponent,availableSquare, attackableSquare, onSelect} = useSquare(classAdditional,piece,color,filaIndex, columnaIndex, team)
-  const {handleMove} =  useContext(BoardContext)
-
+  const {handleMove, board} =  useContext(BoardContext)
+  const {setWhitePieces, setBlackPieces} = useContext(PiecesContext)
+  
   function onMove(){
+    if(board[filaIndex][columnaIndex].piece){
+      if(board[filaIndex][columnaIndex].team === "White"){
+        setWhitePieces(prevCount => prevCount -1)
+      }
+      else setBlackPieces(prevCount => prevCount -1)
+    }
     handleMove(filaIndex,columnaIndex)
   }
 
