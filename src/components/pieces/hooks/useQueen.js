@@ -12,7 +12,9 @@ export default function Queen (filaIndex,columnaIndex,team) {
             isFirstRender.current=false
             return
         }
-        else if (turn && turn !== team) {
+        else if (turn && team !== undefined && turn !== team) {
+            console.log(team)
+            console.log("JaqueMoves")
             queenJaqueMoves()
             updateBoard(boardToupdate)
         }

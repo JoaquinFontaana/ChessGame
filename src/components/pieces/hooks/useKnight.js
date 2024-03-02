@@ -13,7 +13,7 @@ export default function useKnight(filaIndex,columnaIndex,team){
             isFirstRender.current=false
             return
         }
-        else if (turn && turn !== team) {
+        else if (turn && team !== undefined && turn !== team) {
             knightJaqueMoves()
             updateBoard(boardToupdate)
         }

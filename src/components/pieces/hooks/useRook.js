@@ -12,7 +12,8 @@ export default function useRook(filaIndex, columnaIndex, team) {
             isFirstRender.current=false
             return
         }
-        else if (turn && turn !== team) {
+        else if (turn && team !== undefined && turn !== team) {
+            console.log("JaqueMoves")
             rookJaqueMoves()
             updateBoard(boardToupdate)
         }

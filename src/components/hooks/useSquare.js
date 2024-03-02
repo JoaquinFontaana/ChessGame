@@ -1,6 +1,16 @@
 import { BoardContext } from "../../context/board";
 import styles from "../Board.module.css"
 import { useState, useEffect, lazy, useContext } from "react";
+/**
+ * Custom hook for managing a chess square.
+ * @param {string} classAdditional - Additional CSS class for the square.
+ * @param {string} piece - Name of the chess piece on the square.
+ * @param {string} color - Color of the square ("white" or "black").
+ * @param {number} filaIndex - Row index of the square.
+ * @param {number} columnaIndex - Column index of the square.
+ * @param {string} team - Team color of the piece.
+ * @returns {Object} - An object containing the combined CSS class, dynamic component, availability status, selection handler, and attackability status.
+ */
 export default function useSquare(classAdditional, piece, color, filaIndex, columnaIndex, team) {
     const { handlePieceSelect, turn, selectedPiece} = useContext(BoardContext)
     const colorClass = color === "white" ? styles.white : styles.black;
@@ -38,6 +48,9 @@ export default function useSquare(classAdditional, piece, color, filaIndex, colu
     },
     [selectedPiece])
 
+    /**
+     * Handles the selection of the square.
+     */
     function onSelect() {
         if (turn === team)
             handlePieceSelect(columnaIndex, filaIndex)

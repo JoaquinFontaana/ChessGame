@@ -12,7 +12,8 @@ export default function useBishop(filaIndex, columnaIndex, team) {
             isFirstRender.current=false
             return
         }
-        else if (turn && turn !== team) {
+        else if (turn && team !== undefined && turn !== team){
+            console.log("JaqueMoves")
             bishopJaqueMoves()
             updateBoard(boardToupdate)
         }

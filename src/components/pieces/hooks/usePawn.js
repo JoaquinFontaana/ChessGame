@@ -13,7 +13,8 @@ export default function usePawn(columnaIndex, filaIndex, team) {
         if (isFirstRender.current) {
             isFirstRender.current = false;
             return;
-        } else if (turn && turn !== team) {
+        } else if (turn && team !== undefined && turn !== team) {
+            console.log("JaqueMoves")
             pawnJaqueMoves();
             updateBoard(boardToUpdate);
         }

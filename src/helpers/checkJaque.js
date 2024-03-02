@@ -1,8 +1,20 @@
 import {useContext} from "react"
 import {PiecesContext} from "../context/pieces"
 
+/**
+ * Checks for possible moves to put the opponent's king in check.
+ *
+ * @param {number} filaIndex - The row index of the piece.
+ * @param {number} columnaIndex - The column index of the piece.
+ * @param {string} team - The team of the piece.
+ * @param {Array<Array<Object>>} boardToUpdate - The current state of the chess board.
+ */
 export default function useCheckJaque(filaIndex, columnaIndex, team, boardToUpdate) {
     const {setPiecesEvaluated}= useContext(PiecesContext)
+    /**
+     * Marks the threatened squares by a rook and checks if the king is threatened.
+     * @param {boolean} [boolean=true] - Optional parameter to indicate whether to update the count of evaluated pieces.
+     */
     function rookJaqueMoves(boolean = true) {
         let i = filaIndex + 1
         let y = columnaIndex
@@ -92,6 +104,10 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, boardToUpda
         if(boolean) setPiecesEvaluated(prevCount => prevCount + 1 )
     }
 
+    /**
+     * Calculates the possible moves for a bishop piece to check for checkmate.
+     * @param {boolean} [boolean=true] - Optional parameter to indicate whether to update the count of evaluated pieces.
+     */
     function bishopJaqueMoves(boolean = true) {
         let king = false
         let i = filaIndex - 1
@@ -192,6 +208,9 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, boardToUpda
         }
         if(boolean) setPiecesEvaluated(prevCount => prevCount + 1 )
     }
+    /**
+     * Calculates the possible knight moves that can result in a check (jaque).
+     */
     function knightJaqueMoves() {
         const JaqueMoves = [
             { fila: -2, columna: -1 },
@@ -229,6 +248,9 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, boardToUpda
         bishopJaqueMoves(false)
         setPiecesEvaluated(prevCount => prevCount + 1 )
     }
+    /**
+     * Calculates the possible moves for a pawn to put the opponent's king in check.
+     */
     function pawnJaqueMoves(){
         if (team === "White") {
             let positionToEvaluate = boardToUpdate[filaIndex -1][columnaIndex]
@@ -249,6 +271,7 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, boardToUpda
             if (positionToEvaluate && positionToEvaluate.piece === "King" && positionToEvaluate.team !== "White"){
                 boardToUpdate[filaIndex-1][columnaIndex-1].classAdditional = "threatenedKing"
             }
+            setPiecesEvaluated(prevCount => prevCount + 1 )
         }
         if (team === "Black") {
             let positionToEvaluate = boardToUpdate[filaIndex + 1][columnaIndex]
@@ -269,8 +292,8 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, boardToUpda
             if (positionToEvaluate && positionToEvaluate.piece === "King" && positionToEvaluate.team !== "Black"){
                 boardToUpdate[filaIndex+1][columnaIndex-1].classAdditional = "threatenedKing"
             }
+            setPiecesEvaluated(prevCount => prevCount + 1 )
         }
-        setPiecesEvaluated(prevCount => prevCount + 1 )
     }
     function kingJaqueMoves() {
         for (let a = -1; a < 2; a++) {
