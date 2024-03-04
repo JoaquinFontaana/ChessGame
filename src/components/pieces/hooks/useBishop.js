@@ -35,6 +35,7 @@ export default function useBishop(filaIndex, columnaIndex, team) {
       const { fila, columna, classAdditional } = move;
       resetedBoard[fila][columna].classAdditional = classAdditional;
     });
+    console.log(legalMoves)
     updateBoard(resetedBoard);
   }
   

@@ -25,7 +25,7 @@ export default function useSquare(classAdditional, piece, color, filaIndex, colu
 
     useEffect(() => {
         if (piece !== undefined && piece !== null) {
-            const pieceToRender = lazy(() => import(`../pieces/${piece}`));
+            const pieceToRender = lazy(() => import(`../pieces/${piece}.jsx`));
             setDynamicComponent(pieceToRender);
         }
         else {

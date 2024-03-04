@@ -13,7 +13,7 @@ export default function Rook({ filaIndex,columnaIndex,team }) {
       import("../../assets/Piece=Rook, Side=Black.png")
         .then(image => setPieceImage(image.default));
     }
-  }, []);
+  }, [team]);
 
   const {selectedPiece} = useContext(BoardContext)
   const {isWhiteInJaque, isBlackInJaque} = useContext(PiecesContext)

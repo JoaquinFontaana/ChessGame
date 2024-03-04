@@ -1,17 +1,16 @@
-import { createContext, useContext, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import { BOARD, STARTEDBOARD } from "../const/BOARD";
 import TURNS from "../const/TURNS";
 import { PiecesContext } from "./pieces";
-import WHITEPIECES from "../const/WHITEPIECES";
-import BLACKPIECES from "../const/BLACKPIECES.JS";
 export const BoardContext = createContext();
 
 
 export function BoardProvider({ children }) {
     const [board, setBoard] = useState(BOARD);
     const [turn, setTurn] = useState(null);
+    const [toggleGame, setToggleGame] = useState(false);
     const [selectedPiece, setSelectedPiece] = useState(null);
-    const { setWhiteKingPosition, setBlackKingPosition, setBlackPieces, setWhitePieces, blackPieces, whitePieces } = useContext(PiecesContext);
+    const { setWhiteKingPosition, setBlackKingPosition, setBlackPieces, setWhitePieces, blackPieces, whitePieces,restartPieces } = useContext(PiecesContext);
     /**
      * Updates the chess board with a new board configuration.
      * @param {Array} newBoard - The new board configuration.
@@ -24,20 +23,18 @@ export function BoardProvider({ children }) {
      * Toggles the game state between starting and ending.
      * @param {boolean} boolean - The boolean value indicating whether to start or end the game.
      */
-    function toggleGame(boolean) {
-        if (boolean) {
+    useEffect(()=>{
+        if (toggleGame) {
             setTurn(TURNS.white);
             setBoard(STARTEDBOARD);
         } else {
             setSelectedPiece(null);
             setTurn(null);
-            setWhiteKingPosition({ fila: 7, columna: 4 });
-            setBlackKingPosition({ fila: 0, columna: 4 });
-            setWhitePieces(WHITEPIECES)
-            setBlackPieces(BLACKPIECES)
+            restartPieces()
             setBoard(BOARD);
         }
-    }
+    },[toggleGame]) 
+
 
     /**
      * Handles the selection of a chess piece on the board.
@@ -94,14 +91,14 @@ export function BoardProvider({ children }) {
             const filaIndex = parseInt(fila, 10);
             const columnaIndex = parseInt(columna, 10);
 
-            const updatedBoard = [...board];
+            const updatedBoard = board.map((fila) =>(fila.map((casilla) => ({ ...casilla }))));
 
             // Copiar el objeto
             const pieceToMove = { ...updatedBoard[filaIndex][columnaIndex] };
 
             // Actualiza la posición de la pieza en el nuevo lugar
             updatedBoard[toFilaIndex][toColumnaIndex] = pieceToMove;
-
+            console.log(updatedBoard)
             //Evaluar si es un peon, y actualizar la propiedad firstMove
             if (pieceToMove.piece === "Pawn") {
                 updatedBoard[toFilaIndex][toColumnaIndex].firstMove = false;
@@ -109,7 +106,7 @@ export function BoardProvider({ children }) {
 
             //Actualizar el state que contiene la informacion de las piezas
             if (pieceToMove.team === "White") {
-                const newWhitePieces = [...whitePieces]
+                const newWhitePieces = whitePieces.map((piece) => ({ ...piece }));
                 const piece = newWhitePieces.find((piece) => piece.fila === filaIndex && piece.columna === columnaIndex)
                 if(piece.piece === "Pawn"){
                     piece.firstMove = false
@@ -119,7 +116,7 @@ export function BoardProvider({ children }) {
                 setWhitePieces(newWhitePieces)
             }
             if (pieceToMove.team === "Black") {
-                const newBlackPieces = [...blackPieces]
+                const newBlackPieces = blackPieces.map((piece) => ({ ...piece }));
                 const piece = newBlackPieces.find((piece) => piece.fila === filaIndex && piece.columna === columnaIndex)
                 if(piece.piece === "Pawn"){
                     piece.firstMove = false
@@ -154,11 +151,12 @@ export function BoardProvider({ children }) {
                 board: board,
                 toggleGame,
                 updateBoard,
-                selectedPiece: selectedPiece,
                 handlePieceSelect,
                 resetAvailableMovements,
                 handleMove,
-                turn: turn
+                turn: turn,
+                setToggleGame,
+                selectedPiece
             }}
         >
             {children}

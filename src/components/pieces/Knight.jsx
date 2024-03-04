@@ -13,7 +13,7 @@ export default function Knight({ columnaIndex,filaIndex,team }) {
       import("../../assets/Piece=Knight, Side=Black.png")
         .then(image => setPieceImage(image.default));
     }
-  }, []);
+  }, [team]);
 
   const{selectedPiece} = useContext(BoardContext)
   const {isWhiteInJaque, isBlackInJaque} = useContext(PiecesContext)

@@ -7,13 +7,28 @@ export default function useMakeSimulatedMoves() {
     function simulateMoves(moves, fromFilaIndex, fromColumnaIndex, boardToSimulate, team) {
         const { rookJaqueMoves, queenJaqueMoves, pawnJaqueMoves, bishopJaqueMoves, kingJaqueMoves, knightJaqueMoves, checkKingJaque } = checkJaque()
         const legalMoves = []
+        console.log("moves to simulate", moves)
         moves.forEach(move => {
-            const simulatedMove = boardToSimulate.map((fila)=> fila.map((columna)=>({...columna})))
+            const simulatedMove = boardToSimulate.map((fila) => fila.map((columna) => ({ ...columna })))
             const { fila, columna } = move
-            simulatedMove[fila][columna] = {...simulatedMove[fromFilaIndex][fromColumnaIndex]}
+            /*
+            //Si el movimiento es un ataque hacer una copia profunda de los whitePieces y blackPieces, 
+            hacer un find para encontrar la pieza que se va a eliminar y eliminarla de la lista
+            para poder iterar sobre las piezas restantes y verificar si el rey esta en jaque
+            */
+           let blackPiecesCopy = blackPieces.map(piece => ({...piece}))
+           let whitePiecesCopy = whitePieces.map(piece => ({...piece}))
+            if (move.classAdditional === "attackable") {
+                if (team === "White") {
+                     blackPiecesCopy = blackPieces.filter(piece => !(piece.fila === fila && piece.columna === columna))
+                }
+                else {
+                     whitePiecesCopy = whitePieces.filter(piece => !(piece.fila === fila && piece.columna === columna))
+                }
+            }
             simulatedMove[fromFilaIndex][fromColumnaIndex] = { piece: undefined, team: undefined, classAdditional: undefined }
             if (team === "White") {
-                blackPieces.forEach(piece => {
+                blackPiecesCopy.forEach(piece => {
                     if (piece.piece === "King") {
                         kingJaqueMoves(piece.fila, piece.columna, "Black", simulatedMove)
                     }
@@ -33,14 +48,13 @@ export default function useMakeSimulatedMoves() {
                         pawnJaqueMoves(piece.fila, piece.columna, "Black", simulatedMove)
                     }
                 })
-                console.log("Simulated move",boardToSimulate[fromFilaIndex][fromColumnaIndex].piece ,simulatedMove)
+                console.log("Simulated move", boardToSimulate[fromFilaIndex][fromColumnaIndex].piece, simulatedMove)
                 if (checkKingJaque(whiteKingPosition.fila, whiteKingPosition.columna, "White", simulatedMove) === false) {
-                    console.log("Movimiento valido", move)
                     legalMoves.push(move)
                 }
             }
             else {
-                whitePieces.forEach(piece => {
+                whitePiecesCopy.forEach(piece => {
                     if (piece.piece === "King") {
                         kingJaqueMoves(piece.fila, piece.columna, "White", simulatedMove)
                     }
@@ -60,12 +74,12 @@ export default function useMakeSimulatedMoves() {
                         pawnJaqueMoves(piece.fila, piece.columna, "White", simulatedMove)
                     }
                 })
-                if (checkKingJaque(blackKingPosition.fila, blackKingPosition.columna, "Black", simulatedMove)=== false) {
+                if (checkKingJaque(blackKingPosition.fila, blackKingPosition.columna, "Black", simulatedMove) === false) {
                     legalMoves.push(move)
                 }
             }
         });
         return legalMoves
     }
-    return{simulateMoves}
+    return { simulateMoves }
 }

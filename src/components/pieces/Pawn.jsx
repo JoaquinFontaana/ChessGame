@@ -14,7 +14,7 @@ export default function Pawn({ columnaIndex, filaIndex, team}) {
       import("../../assets/Piece=Pawn, Side=Black.png")
         .then(image => setPieceImage(image.default));
     }
-  }, []);
+  }, [team]);
 
   const { showMovements, showLegalMovements} = usePawn(columnaIndex, filaIndex, team)
   const{selectedPiece} = useContext(BoardContext)

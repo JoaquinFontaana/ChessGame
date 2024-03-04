@@ -13,7 +13,7 @@ export default function King({ team, filaIndex, columnaIndex }) {
       import("../../assets/Piece=King, Side=Black.png")
         .then(image => setPieceImage(image.default));
     }
-  }, []);
+  }, [team]);
 
   const { selectedPiece } = useContext(BoardContext);
   const { showMovements, showLegalMovements } = useKing(filaIndex, columnaIndex, team);

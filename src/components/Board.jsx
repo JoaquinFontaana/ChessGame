@@ -4,8 +4,7 @@ import styles from "./Board.module.css";
 import { BoardContext } from "../context/board";
 
 export default function Board() {
-    const {board} = useContext(BoardContext);
-
+    const { board } = useContext(BoardContext);
     return (
         <section className={styles.board}>
             {board.map((fila, filaIndex) => (

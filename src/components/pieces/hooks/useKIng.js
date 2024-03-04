@@ -22,12 +22,20 @@ export default function useKing(filaIndex, columnaIndex, team) {
     setIsWhiteInJaque,
   } = useContext(PiecesContext);
 
-  const { kingJaqueMoves, queenJaqueMoves, pawnJaqueMoves,knightJaqueMoves,rookJaqueMoves, checkKingJaque } = useCheckJaque();
+  const { 
+    kingJaqueMoves, 
+    queenJaqueMoves,
+     pawnJaqueMoves,
+     knightJaqueMoves,
+     rookJaqueMoves, 
+     checkKingJaque 
+    } = useCheckJaque();
+
   /**
    * Effect hook that evaluate jaque when the all enemy pieces are evaluated.
    */
  useEffect(() => {
-    if (board && turn && turn === team) {
+    if (turn && turn === team) {
       const boardToCheck = board.map((fila) => fila.map((cell) => ({...cell})));
       if(team === "White"){
         //Evaluar jaque al rey Blanco por las piezas negras
@@ -82,8 +90,7 @@ export default function useKing(filaIndex, columnaIndex, team) {
         }
       }
     }
-  }, [turn,whitePieces,blackPieces]);
-
+  }, [turn]);
   /**
    * Function to show the available movements for the King piece.
    */
