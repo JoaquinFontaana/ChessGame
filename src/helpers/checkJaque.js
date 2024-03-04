@@ -299,18 +299,11 @@ export default function useCheckJaque() {
             }
         }
     }
-    function checkKingJaque(filaIndex, columnaIndex,team,boardToCheck) {
-        if (team === "Black") {
+    function checkKingJaque(filaIndex, columnaIndex,boardToCheck) {
                 if (boardToCheck[filaIndex][columnaIndex].classAdditional === "threatenedKing") {
                     return(true);
                 } else return(false);
             }
-            else {
-            if (boardToCheck[filaIndex][columnaIndex].classAdditional === "threatenedKing") {
-                return(true);
-            } else return(false);
-        }
-    }
 
     return { rookJaqueMoves, bishopJaqueMoves, knightJaqueMoves, queenJaqueMoves,pawnJaqueMoves, kingJaqueMoves, checkKingJaque}
 }

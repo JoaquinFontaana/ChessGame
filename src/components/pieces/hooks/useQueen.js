@@ -1,42 +1,41 @@
-import { useContext, useEffect} from "react";
+import { useContext, useEffect, useState } from "react";
 import { BoardContext } from "../../../context/board";
+import { PiecesContext } from "../../../context/pieces";
 import moves from "../../../helpers/moves";
-import useMakeSimulatedMoves from "../../../helpers/useMakeSimulatedMove";
-export default function Queen (filaIndex,columnaIndex,team) {
-    const {resetAvailableMovements, updateBoard,board} = useContext(BoardContext)
-    const {verticalHorizontalMoves, diagonalMoves} = moves(filaIndex,columnaIndex,team)
-
-    function showMovements(){
-        const resetedBoard = resetAvailableMovements()
-        const posibleMoves = [...verticalHorizontalMoves(resetedBoard), ...diagonalMoves(resetedBoard)]
-        posibleMoves.forEach(move => {
-            const {fila, columna, classAdditional} = move
-            resetedBoard[fila][columna].classAdditional = classAdditional
-        });
-        updateBoard(resetedBoard)
+import useCommonMethods from "./useCommonMethods";
+export default function Queen(filaIndex, columnaIndex, team) {
+  const { resetAvailableMovements, updateBoard, board, turn } = useContext(BoardContext)
+  const { verticalHorizontalMoves, diagonalMoves } = moves(filaIndex, columnaIndex, team)
+  const [legalMoves, setLegalMoves] = useState([])
+  const { isBlackInJaque, isWhiteInJaque } = useContext(PiecesContext);
+  const { commonCheckLegalMoves, commonShowMovements, commonShowLegalMovements } = useCommonMethods(filaIndex, columnaIndex, team)
+  useEffect(() => {
+    if (turn === team) {
+      if (team === "White") {
+        if (isWhiteInJaque) {
+          checkLegalMoves()
+        }
+      }
+      else if (isBlackInJaque) {
+        checkLegalMoves()
+      }
     }
-    function showLegalMovements(){
-        const resetedBoard = resetAvailableMovements()
-        const legalMoves = checkLegalMoves()
-        legalMoves.forEach((move) => {
-          const { fila, columna, classAdditional } = move;
-          resetedBoard[fila][columna].classAdditional = classAdditional;
-        });
-        updateBoard(resetedBoard);
-      }
-      
-      const { simulateMoves } = useMakeSimulatedMoves();
-      function checkLegalMoves(){
-        const boardToSimulate = board.map((fila) => [...fila]);
-        const posibleMoves = [...verticalHorizontalMoves(board), ...diagonalMoves(board)]
-        const legalMoves = simulateMoves(
-          posibleMoves,
-          filaIndex,
-          columnaIndex,
-          boardToSimulate,
-          team
-        );
-        return legalMoves;
-      }
-    return{showMovements,showLegalMovements}
+  }, [turn, isBlackInJaque, isWhiteInJaque])
+
+  function showMovements() {
+    const resetedBoard = resetAvailableMovements()
+    const posibleMoves = [...verticalHorizontalMoves(resetedBoard), ...diagonalMoves(resetedBoard)]
+    commonShowMovements(posibleMoves, resetedBoard)
+  }
+  function showLegalMovements() {
+    const resetedBoard = resetAvailableMovements()
+    commonShowLegalMovements(legalMoves, resetedBoard)
+  }
+
+  function checkLegalMoves() {
+    const posibleMoves = [...verticalHorizontalMoves(board), ...diagonalMoves(board)]
+    const newLegalMoves = commonCheckLegalMoves(posibleMoves)
+    setLegalMoves(newLegalMoves)
+  }
+  return { showMovements, showLegalMovements }
 }

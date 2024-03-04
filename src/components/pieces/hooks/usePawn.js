@@ -1,42 +1,41 @@
-import { useContext, useEffect} from "react";
+import { useContext, useEffect, useState } from "react";
 import { BoardContext } from "../../../context/board";
-import useMakeSimulatedMoves from "../../../helpers/useMakeSimulatedMove";
+import { PiecesContext } from "../../../context/pieces";
+import useCommomMethods from "./useCommonMethods";
 import moves from "../../../helpers/moves";
 export default function usePawn(columnaIndex, filaIndex, team) {
-    const { updateBoard,resetAvailableMovements,board} = useContext(BoardContext)
+  const { resetAvailableMovements, board, turn } = useContext(BoardContext)
+  const { commonCheckLegalMoves, commonShowMovements, commonShowLegalMovements } = useCommomMethods(filaIndex, columnaIndex, team)
+  const { pawnMoves } = moves(filaIndex, columnaIndex, team)
+  const [legalMoves, setLegalMoves] = useState([])
+  const { isBlackInJaque, isWhiteInJaque } = useContext(PiecesContext);
 
-    const {pawnMoves} = moves(filaIndex,columnaIndex,team)
-    function showMovements() { 
-        const resetedBoard = resetAvailableMovements()
-        const posibleMoves = pawnMoves(resetedBoard)
-        posibleMoves.forEach(move => {
-            const {fila, columna, classAdditional} = move
-            resetedBoard[fila][columna].classAdditional = classAdditional
-        });
-        updateBoard(resetedBoard);
+  useEffect(() => {
+    if (turn === team) {
+      if (team === "White") {
+        if (isWhiteInJaque) {
+          checkLegalMoves()
         }
-        function showLegalMovements(){
-            const resetedBoard = resetAvailableMovements()
-            const legalMoves = checkLegalMoves()
-            legalMoves.forEach((move) => {
-              const { fila, columna, classAdditional } = move;
-              resetedBoard[fila][columna].classAdditional = classAdditional;
-            });
-            updateBoard(resetedBoard);
-          }
-          
-          const { simulateMoves } = useMakeSimulatedMoves();
-          function checkLegalMoves(){
-            const boardToSimulate = board.map((fila) => [...fila]);
-            const posibleMoves = pawnMoves(board);
-            const legalMoves = simulateMoves(
-              posibleMoves,
-              filaIndex,
-              columnaIndex,
-              boardToSimulate,
-              team
-            );
-            return legalMoves;
-          }
-    return { showMovements, showLegalMovements}
+      }
+      else if (isBlackInJaque) {
+        checkLegalMoves()
+      }
+    }
+  }, [turn, isBlackInJaque, isWhiteInJaque])
+
+  function showMovements() {
+    const resetedBoard = resetAvailableMovements()
+    const posibleMoves = pawnMoves(resetedBoard)
+    commonShowMovements(posibleMoves, resetedBoard)
+  }
+  function showLegalMovements() {
+    const resetedBoard = resetAvailableMovements()
+    commonShowLegalMovements(legalMoves, resetedBoard)
+  }
+
+  function checkLegalMoves() {
+    const newLegalMoves = commonCheckLegalMoves(pawnMoves(board))
+    setLegalMoves(newLegalMoves)
+  }
+  return { showMovements, showLegalMovements }
 }

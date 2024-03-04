@@ -4,7 +4,6 @@ import TURNS from "../const/TURNS";
 import { PiecesContext } from "./pieces";
 export const BoardContext = createContext();
 
-
 export function BoardProvider({ children }) {
     const [board, setBoard] = useState(BOARD);
     const [turn, setTurn] = useState(null);

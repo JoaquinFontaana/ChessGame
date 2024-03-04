@@ -17,7 +17,6 @@ export default function useMakeSimulatedMoves() {
     function simulateMoves(moves, fromFilaIndex, fromColumnaIndex, boardToSimulate, team) {
         const { rookJaqueMoves, queenJaqueMoves, pawnJaqueMoves, bishopJaqueMoves, kingJaqueMoves, knightJaqueMoves, checkKingJaque } = checkJaque()
         const legalMoves = []
-        console.log("moves to simulate", moves)
         let blackPiecesCopy = []
         let whitePiecesCopy = []
         moves.forEach(move => {
@@ -60,8 +59,7 @@ export default function useMakeSimulatedMoves() {
                         pawnJaqueMoves(piece.fila, piece.columna, "Black", simulatedMove)
                     }
                 })
-                console.log("Simulated move", boardToSimulate[fromFilaIndex][fromColumnaIndex].piece, simulatedMove)
-                if (checkKingJaque(whiteKingPosition.fila, whiteKingPosition.columna, "White", simulatedMove) === false) {
+                if (checkKingJaque(whiteKingPosition.fila, whiteKingPosition.columna, simulatedMove) === false) {
                     legalMoves.push(move)
                 }
             }
@@ -86,7 +84,7 @@ export default function useMakeSimulatedMoves() {
                         pawnJaqueMoves(piece.fila, piece.columna, "White", simulatedMove)
                     }
                 })
-                if (checkKingJaque(blackKingPosition.fila, blackKingPosition.columna, "Black", simulatedMove) === false) {
+                if (checkKingJaque(blackKingPosition.fila, blackKingPosition.columna, simulatedMove) === false) {
                     legalMoves.push(move)
                 }
             }
