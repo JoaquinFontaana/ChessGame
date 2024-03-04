@@ -1,21 +1,39 @@
-import PieceWhite from "../../assets/Piece=Queen, Side=White.png";
-import PieceBlack from "../../assets/Piece=Queen, Side=Black.png";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState} from "react";
 import { BoardContext } from "../../context/board";
 import useQueen from "./hooks/useQueen"
+import { PiecesContext } from "../../context/pieces";
 export default function Queen({filaIndex, columnaIndex ,team }) {
-  const src = team === "White" ? PieceWhite : PieceBlack;
+
+  const [pieceImage, setPieceImage] = useState(null); 
+  useEffect(() => {
+    if (team === 'White') {
+      import("../../assets/Piece=Queen, Side=White.png")
+        .then(image => setPieceImage(image.default));
+    } else {
+      import("../../assets/Piece=Queen, Side=Black.png")
+        .then(image => setPieceImage(image.default));
+    }
+  }, []);
   
   const{selectedPiece}=useContext(BoardContext)
-  const {showMovements}= useQueen(filaIndex,columnaIndex,team)
-  useEffect(()=>{
-    if(selectedPiece === `${filaIndex}-${columnaIndex}`){
-      showMovements()
+  const {isWhiteInJaque, isBlackInJaque} = useContext(PiecesContext)
+  const {showMovements, showLegalMovements}= useQueen(filaIndex,columnaIndex,team)
+
+  useEffect(() => {
+    if (selectedPiece === `${filaIndex}-${columnaIndex}`) {
+      if (team === "White"){ 
+        if(isWhiteInJaque) showLegalMovements()
+        else showMovements()
     }
-  },[selectedPiece])
+    if (team === "Black"){ 
+      if(isBlackInJaque) showLegalMovements()
+      else showMovements()
+  }
+}
+  },[selectedPiece, isWhiteInJaque, isBlackInJaque]);
   return (
     <span>
-      <img src={src} alt="Queen" />
+      {pieceImage ? <img src={pieceImage} alt="Queen" /> : null}
     </span>
   );
 }

@@ -1,25 +1,41 @@
-import PieceWhite from "../../assets/Piece=Pawn, Side=White.png";
-import PieceBlack from "../../assets/Piece=Pawn, Side=Black.png";
 import usePawn from "./hooks/usePawn";
-import { useContext, useEffect} from "react";
+import { useContext, useEffect, useState} from "react";
 import { BoardContext } from "../../context/board";
+import { PiecesContext } from "../../context/pieces";
 export default function Pawn({ columnaIndex, filaIndex, team}) {
 
-  const src = team === "White" ? PieceWhite : PieceBlack;
+  const [pieceImage, setPieceImage] = useState(null);
 
-  const { showMovements} = usePawn(columnaIndex, filaIndex, team)
-
-  const{selectedPiece} = useContext(BoardContext)
-
-  useEffect(()=>{
-    if(selectedPiece === `${filaIndex}-${columnaIndex}`){
-        showMovements()
+  useEffect(() => {
+    if (team === 'White') {
+      import("../../assets/Piece=Pawn, Side=White.png")
+        .then(image => setPieceImage(image.default));
+    } else {
+      import("../../assets/Piece=Pawn, Side=Black.png")
+        .then(image => setPieceImage(image.default));
     }
-},[selectedPiece])
+  }, []);
+
+  const { showMovements, showLegalMovements} = usePawn(columnaIndex, filaIndex, team)
+  const{selectedPiece} = useContext(BoardContext)
+  const {isWhiteInJaque, isBlackInJaque} = useContext(PiecesContext)
+
+  useEffect(() => {
+    if (selectedPiece === `${filaIndex}-${columnaIndex}`) {
+      if (team === "White"){ 
+        if(isWhiteInJaque) showLegalMovements()
+        else showMovements()
+    }
+    if (team === "Black"){ 
+      if(isBlackInJaque) showLegalMovements()
+      else showMovements()
+  }
+}
+  },[selectedPiece, isWhiteInJaque, isBlackInJaque]);
 
   return (
     <span>
-      <img src={src} alt="Pawn" />
+      {pieceImage ? <img src={pieceImage} alt="Pawn" /> : null}
     </span>
   );
 }

@@ -1,29 +1,42 @@
 import { useContext, useEffect} from "react";
 import { BoardContext } from "../../../context/board";
+import useMakeSimulatedMoves from "../../../helpers/useMakeSimulatedMove";
 import moves from "../../../helpers/moves";
-import useCheckJaque from "../../../helpers/checkJaque";
-import { useRef } from "react";
 export default function usePawn(columnaIndex, filaIndex, team) {
-    const { updateBoard,resetAvailableMovements,turn,board} = useContext(BoardContext)
-    const boardToUpdate = [...board]
-    const {pawnJaqueMoves} = useCheckJaque(filaIndex,columnaIndex,team,boardToUpdate)
+    const { updateBoard,resetAvailableMovements,board} = useContext(BoardContext)
 
-    const isFirstRender = useRef(true);
-    useEffect(() => {
-        if (isFirstRender.current) {
-            isFirstRender.current = false;
-            return;
-        } else if (turn && team !== undefined && turn !== team) {
-            console.log("JaqueMoves")
-            pawnJaqueMoves();
-            updateBoard(boardToUpdate);
-        }
-    }, [turn]);
+    const {pawnMoves} = moves(filaIndex,columnaIndex,team)
     function showMovements() { 
         const resetedBoard = resetAvailableMovements()
-        const {pawnMoves} = moves(filaIndex,columnaIndex,team,resetedBoard)
-        pawnMoves()
+        const posibleMoves = pawnMoves(resetedBoard)
+        posibleMoves.forEach(move => {
+            const {fila, columna, classAdditional} = move
+            resetedBoard[fila][columna].classAdditional = classAdditional
+        });
         updateBoard(resetedBoard);
         }
-    return { showMovements}
+        function showLegalMovements(){
+            const resetedBoard = resetAvailableMovements()
+            const legalMoves = checkLegalMoves()
+            legalMoves.forEach((move) => {
+              const { fila, columna, classAdditional } = move;
+              resetedBoard[fila][columna].classAdditional = classAdditional;
+            });
+            updateBoard(resetedBoard);
+          }
+          
+          const { simulateMoves } = useMakeSimulatedMoves();
+          function checkLegalMoves(){
+            const boardToSimulate = board.map((fila) => [...fila]);
+            const posibleMoves = pawnMoves(board);
+            const legalMoves = simulateMoves(
+              posibleMoves,
+              filaIndex,
+              columnaIndex,
+              boardToSimulate,
+              team
+            );
+            return legalMoves;
+          }
+    return { showMovements, showLegalMovements}
 }

@@ -1,32 +1,56 @@
-import { useContext, useEffect,useRef } from "react";
+import { useCallback, useContext, useEffect } from "react";
 import { BoardContext } from "../../../context/board";
 import moves from "../../../helpers/moves";
-import checkJaque from "../../../helpers/checkJaque"
+import useMakeSimulatedMove from "../../../helpers/useMakeSimulatedMove";
+import { PiecesContext } from "../../../context/pieces";
 export default function useBishop(filaIndex, columnaIndex, team) {
-    const {resetAvailableMovements, updateBoard,board,turn} = useContext(BoardContext)
-    const boardToupdate = [...board]
-    const {bishopJaqueMoves}= checkJaque(filaIndex,columnaIndex,team,boardToupdate)
-    const isFirstRender= useRef(true)
-    useEffect(() => {
-        if(isFirstRender.current){
-            isFirstRender.current=false
-            return
-        }
-        else if (turn && team !== undefined && turn !== team){
-            console.log("JaqueMoves")
-            bishopJaqueMoves()
-            updateBoard(boardToupdate)
-        }
-    }, [turn])
+  const { resetAvailableMovements, updateBoard, board, turn } = useContext(BoardContext);
 
-    function showMovements() {
-        const resetedBoard = resetAvailableMovements()
-        const {diagonalMoves} = moves(filaIndex,columnaIndex,team,resetedBoard)
-        diagonalMoves()
-        updateBoard(resetedBoard)
-                }
-    function checkLegalMoves() {
-        
+  const { isBlackKingInJaque, isWhiteKingInJaque } = useContext(PiecesContext);
+
+ /* useEffect(() => {
+    if (turn === team) {
+      if (team === "White" && isWhiteKingInJaque) checkLegalMoves();
+      else if (team === "Black" && isBlackKingInJaque) checkLegalMoves();
     }
-    return { showMovements }
+  }, [isBlackKingInJaque,isWhiteKingInJaque]);*/
+
+  const { diagonalMoves } = moves(filaIndex, columnaIndex, team);
+  function showMovements() {
+    const resetedBoard = resetAvailableMovements();
+    const posibleMoves = diagonalMoves(resetedBoard);
+    posibleMoves.forEach((move) => {
+      const { fila, columna, classAdditional } = move;
+      resetedBoard[fila][columna].classAdditional = classAdditional;
+    });
+    updateBoard(resetedBoard);
+  }
+
+  function showLegalMovements(){
+    console.log('showLegalMovements')
+    const resetedBoard = resetAvailableMovements()
+    const legalMoves = checkLegalMoves()
+    console.log(legalMoves)
+    legalMoves.forEach((move) => {
+      const { fila, columna, classAdditional } = move;
+      resetedBoard[fila][columna].classAdditional = classAdditional;
+    });
+    updateBoard(resetedBoard);
+  }
+  
+  const { simulateMoves } = useMakeSimulatedMove();
+  function checkLegalMoves(){
+    const boardToSimulate = board.map((fila) => [...fila]);
+    const posibleMoves = diagonalMoves(board);
+    const legalMoves = simulateMoves(
+      posibleMoves,
+      filaIndex,
+      columnaIndex,
+      boardToSimulate,
+      team
+    );
+    return legalMoves;
+  }
+  return {showMovements, showLegalMovements}
+
 }

@@ -2,15 +2,16 @@ import { createContext, useContext, useState } from "react";
 import { BOARD, STARTEDBOARD } from "../const/BOARD";
 import TURNS from "../const/TURNS";
 import { PiecesContext } from "./pieces";
+import WHITEPIECES from "../const/WHITEPIECES";
+import BLACKPIECES from "../const/BLACKPIECES.JS";
 export const BoardContext = createContext();
 
 
 export function BoardProvider({ children }) {
-    const { setWhiteKingPosition } = useContext(PiecesContext);
     const [board, setBoard] = useState(BOARD);
     const [turn, setTurn] = useState(null);
     const [selectedPiece, setSelectedPiece] = useState(null);
-
+    const { setWhiteKingPosition, setBlackKingPosition, setBlackPieces, setWhitePieces, blackPieces, whitePieces } = useContext(PiecesContext);
     /**
      * Updates the chess board with a new board configuration.
      * @param {Array} newBoard - The new board configuration.
@@ -26,12 +27,14 @@ export function BoardProvider({ children }) {
     function toggleGame(boolean) {
         if (boolean) {
             setTurn(TURNS.white);
-            setWhiteKingPosition({ filaIndex: 7, columnaIndex: 4 });
             setBoard(STARTEDBOARD);
         } else {
             setSelectedPiece(null);
             setTurn(null);
-            setWhiteKingPosition(null);
+            setWhiteKingPosition({ fila: 7, columna: 4 });
+            setBlackKingPosition({ fila: 0, columna: 4 });
+            setWhitePieces(WHITEPIECES)
+            setBlackPieces(BLACKPIECES)
             setBoard(BOARD);
         }
     }
@@ -74,7 +77,6 @@ export function BoardProvider({ children }) {
         const resetedBoard = updatedBoard.map((fila) =>
             fila.map((casilla) => ({ ...casilla, classAdditional: "" }))
         );
-        console.log(resetedBoard);
         setBoard(resetedBoard);
     }
 
@@ -86,11 +88,6 @@ export function BoardProvider({ children }) {
     function handleMove(toFilaIndex, toColumnaIndex) {
         //Actualizar turno
         if (selectedPiece) {
-            if (turn === TURNS.white) {
-                setTurn(TURNS.black);
-            } else {
-                setTurn(TURNS.white);
-            }
             //Obtener fila y columa de la pieza seleccionada
             const [fila, columna] = selectedPiece.split("-");
             //Parsear fila y columna
@@ -109,16 +106,45 @@ export function BoardProvider({ children }) {
             if (pieceToMove.piece === "Pawn") {
                 updatedBoard[toFilaIndex][toColumnaIndex].firstMove = false;
             }
+
+            //Actualizar el state que contiene la informacion de las piezas
+            if (pieceToMove.team === "White") {
+                const newWhitePieces = [...whitePieces]
+                const piece = newWhitePieces.find((piece) => piece.fila === filaIndex && piece.columna === columnaIndex)
+                if(piece.piece === "Pawn"){
+                    piece.firstMove = false
+                }
+                piece.fila = toFilaIndex
+                piece.columna = toColumnaIndex
+                setWhitePieces(newWhitePieces)
+            }
+            if (pieceToMove.team === "Black") {
+                const newBlackPieces = [...blackPieces]
+                const piece = newBlackPieces.find((piece) => piece.fila === filaIndex && piece.columna === columnaIndex)
+                if(piece.piece === "Pawn"){
+                    piece.firstMove = false
+                }
+                piece.fila = toFilaIndex
+                piece.columna = toColumnaIndex
+                setBlackPieces(newBlackPieces)
+            }
+            //Actualizar la posición del rey
             if (pieceToMove.piece === "King") {
-                console.log("fila:", toFilaIndex, "columna:", toColumnaIndex);
-                if (pieceToMove.team === TURNS.white) {
-                    setWhiteKingPosition({ filaIndex: toFilaIndex, columnaIndex: toColumnaIndex });
+                if (pieceToMove.team === "White") {
+                    setWhiteKingPosition({ fila: toFilaIndex, columna: toColumnaIndex })
+                } else {
+                    setBlackKingPosition({ fila: toFilaIndex, columna: toColumnaIndex })
                 }
             }
             // Limpiar la posición anterior
             updatedBoard[filaIndex][columnaIndex] = { piece: undefined, team: undefined, classAdditional: "" };
             setSelectedPiece(null);
             resetAllSquareClasses(updatedBoard);
+            if (turn === TURNS.white) {
+                setTurn(TURNS.black);
+            } else {
+                setTurn(TURNS.white);
+            }
         }
     }
 
@@ -132,7 +158,7 @@ export function BoardProvider({ children }) {
                 handlePieceSelect,
                 resetAvailableMovements,
                 handleMove,
-                turn: turn,
+                turn: turn
             }}
         >
             {children}

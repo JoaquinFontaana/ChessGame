@@ -1,8 +1,9 @@
-import { useContext, useEffect, useRef, useState } from "react";
+import { useContext, useEffect} from "react";
 import { BoardContext } from "../../../context/board";
 import moves from "../../../helpers/moves";
 import { PiecesContext } from "../../../context/pieces";
 import useCheckJaque from "../../../helpers/checkJaque";
+import useMakeSimulatedMoves from "../../../helpers/useMakeSimulatedMove";
 
 /**
  * Custom hook for handling the behavior of a King piece in a chess game.
@@ -12,67 +13,113 @@ import useCheckJaque from "../../../helpers/checkJaque";
  * @returns {Object} An object containing the showMovements function and the jaque state.
  */
 export default function useKing(filaIndex, columnaIndex, team) {
-  const { resetAvailableMovements, updateBoard, turn, board } =
-    useContext(BoardContext);
-  const { whitePieces, blackPieces, piecesEvaluated, setPiecesEvaluated } =
-    useContext(PiecesContext);
-  const boardToupdate = [...board];
-  const { kingJaqueMoves } = useCheckJaque(
-    filaIndex,
-    columnaIndex,
-    team,
-    boardToupdate
-  );
-  const isFirstRender = useRef(true);
-  const [jaque, setJaque] = useState(false);
+  const { resetAvailableMovements, updateBoard, turn, board } = useContext(BoardContext);
+  
+  const {
+    whitePieces,
+    blackPieces,
+    setIsBlackInJaque,
+    setIsWhiteInJaque,
+  } = useContext(PiecesContext);
 
+  const { kingJaqueMoves, queenJaqueMoves, pawnJaqueMoves,knightJaqueMoves,rookJaqueMoves, checkKingJaque } = useCheckJaque();
   /**
-   * Effect hook that runs when the turn changes.
+   * Effect hook that evaluate jaque when the all enemy pieces are evaluated.
    */
-  useEffect(() => {
-    if (isFirstRender.current) {
-      isFirstRender.current = false;
-      return;
-    } else if (turn && team !== undefined && turn !== team) {
-      console.log("JaqueMoves");
-      kingJaqueMoves();
-      updateBoard(boardToupdate);
-    }
-  }, [turn]);
-
-  /**
-   * Effect hook that runs when the piecesEvaluated, blackPieces, or whitePieces change.
-   */
-  useEffect(() => {
-    if (turn && turn === team) {
-      if (team !== "White") {
-        console.log(piecesEvaluated, team);
-        if (piecesEvaluated === whitePieces) {
-          console.log("Deteccion de todas las piezas evaluadas");
-          setPiecesEvaluated(0);
-          if (board[filaIndex][columnaIndex].classAdditional === "threatenedKing") {
-            setJaque(true);
-          } else setJaque(false);
+ useEffect(() => {
+    if (board && turn && turn === team) {
+      const boardToCheck = board.map((fila) => fila.map((cell) => ({...cell})));
+      if(team === "White"){
+        //Evaluar jaque al rey Blanco por las piezas negras
+        blackPieces.forEach((piece) => {
+          const {fila, columna} = piece
+          if(piece.piece === "King"){
+            kingJaqueMoves(fila, columna, "Black",boardToCheck);
+          }
+          else if(piece.piece === "Queen"){
+            queenJaqueMoves(fila, columna,"Black",boardToCheck);
+          }
+          else if(piece.piece === "Pawn"){
+            pawnJaqueMoves(fila, columna, "Black",boardToCheck);
+          }
+          else if(piece.piece === "Knight"){
+            knightJaqueMoves(fila, columna, "Black",boardToCheck);
+          }
+          else if(piece.piece === "Rook"){
+            rookJaqueMoves(fila, columna, "Black",boardToCheck);
+          }
+        });
+        if(checkKingJaque(filaIndex, columnaIndex,team, boardToCheck)){
+          setIsWhiteInJaque(true)
+        } else{
+          setIsWhiteInJaque(false)
         }
-      } else if (piecesEvaluated === blackPieces) {
-        console.log("Deteccion de todas las piezas evaluadas");
-        setPiecesEvaluated(0);
-        if (board[filaIndex][columnaIndex].classAdditional === "threatenedKing") {
-          setJaque(true);
-        } else setJaque(false);
+      }
+      else{
+        //Evaluar jaque al rey negro por las piezas blanca
+        whitePieces.forEach((piece) => {
+          const {fila, columna} = piece
+          if(piece.piece === "King"){
+            kingJaqueMoves(fila, columna, "White",boardToCheck);
+          }
+          else if(piece.piece === "Queen"){
+            queenJaqueMoves(fila, columna,"White",boardToCheck);
+          }
+          else if(piece.piece === "Pawn"){
+            pawnJaqueMoves(fila, columna, "White",boardToCheck);
+          }
+          else if(piece.piece === "Knight"){
+            knightJaqueMoves(fila, columna, "White",boardToCheck);
+          }
+          else if(piece.piece === "Rook"){
+            rookJaqueMoves(fila, columna, "White",boardToCheck);
+          }
+        });
+        if(checkKingJaque(filaIndex, columnaIndex, team,boardToCheck)){
+          setIsBlackInJaque(true)
+        } else{
+          setIsBlackInJaque(false)
+        }
       }
     }
-  }, [piecesEvaluated, blackPieces, whitePieces]);
+  }, [turn,whitePieces,blackPieces]);
 
   /**
    * Function to show the available movements for the King piece.
    */
+  const { kingMoves } = moves(filaIndex, columnaIndex, team);
   function showMovements() {
     const resetedBoard = resetAvailableMovements();
-    const { kingMoves } = moves(filaIndex, columnaIndex, team, resetedBoard);
-    kingMoves();
+    const posibleMoves = kingMoves(resetedBoard);
+    posibleMoves.forEach((move) => {
+      const { fila, columna, classAdditional } = move;
+      resetedBoard[fila][columna].classAdditional = classAdditional;
+    });
+    updateBoard(resetedBoard);
+  }
+  function showLegalMovements(){
+    const resetedBoard = resetAvailableMovements()
+    const legalMoves = checkLegalMoves()
+    legalMoves.forEach((move) => {
+      const { fila, columna, classAdditional } = move;
+      resetedBoard[fila][columna].classAdditional = classAdditional;
+    });
     updateBoard(resetedBoard);
   }
 
-  return { showMovements, jaque };
+  const { simulateMoves } = useMakeSimulatedMoves();
+  function checkLegalMoves(){
+    const boardToSimulate = board.map((fila) => fila.map((cell) => ({...cell})));
+    const posibleMoves = kingMoves(board);
+    const legalMoves = simulateMoves(
+      posibleMoves,
+      filaIndex,
+      columnaIndex,
+      boardToSimulate,
+      team
+    );
+    return legalMoves;
+  }
+
+  return { showMovements, showLegalMovements};
 }

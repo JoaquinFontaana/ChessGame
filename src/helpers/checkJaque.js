@@ -1,6 +1,3 @@
-import {useContext} from "react"
-import {PiecesContext} from "../context/pieces"
-
 /**
  * Checks for possible moves to put the opponent's king in check.
  *
@@ -9,13 +6,12 @@ import {PiecesContext} from "../context/pieces"
  * @param {string} team - The team of the piece.
  * @param {Array<Array<Object>>} boardToUpdate - The current state of the chess board.
  */
-export default function useCheckJaque(filaIndex, columnaIndex, team, boardToUpdate) {
-    const {setPiecesEvaluated}= useContext(PiecesContext)
+export default function useCheckJaque() {
     /**
      * Marks the threatened squares by a rook and checks if the king is threatened.
      * @param {boolean} [boolean=true] - Optional parameter to indicate whether to update the count of evaluated pieces.
      */
-    function rookJaqueMoves(boolean = true) {
+    function rookJaqueMoves(filaIndex,columnaIndex,team,boardToUpdate) {
         let i = filaIndex + 1
         let y = columnaIndex
         let king = false
@@ -28,7 +24,7 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, boardToUpda
             && !king
             && !enemyPiece
         ) {
-            if (boardToUpdate[i][y].piece === undefined) boardToUpdate[i][y].classAdditional = "threatened"
+            if (boardToUpdate[i][y].piece === undefined || boardToUpdate[i][y].team === team) boardToUpdate[i][y].classAdditional = "threatened"
             else if (boardToUpdate[i][y].piece === "King" && boardToUpdate[i][y].team !== team) {
                 boardToUpdate[i][y].classAdditional = "threatenedKing"
                 king = true
@@ -49,7 +45,7 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, boardToUpda
             boardToUpdate[i][y].team !== team
             && !king
         ) {
-            if (boardToUpdate[i][y].piece === undefined) boardToUpdate[i][y].classAdditional = "threatened"
+            if (boardToUpdate[i][y].piece === undefined || boardToUpdate[i][y].team === team) boardToUpdate[i][y].classAdditional = "threatened"
             else if (boardToUpdate[i][y].piece === "King" && boardToUpdate[i][y].team !== team) {
                 boardToUpdate[i][y].classAdditional = "threatenedKing"
                 king = true
@@ -70,7 +66,7 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, boardToUpda
             boardToUpdate[i][y].team !== team
             && !king
         ) {
-            if (boardToUpdate[i][y].piece === undefined) boardToUpdate[i][y].classAdditional = "threatened"
+            if (boardToUpdate[i][y].piece === undefined || boardToUpdate[i][y].team === team) boardToUpdate[i][y].classAdditional = "threatened"
             else if (boardToUpdate[i][y].piece === "King" && boardToUpdate[i][y].team !== team) {
                 boardToUpdate[i][y].classAdditional = "threatenedKing"
                 king = true
@@ -91,7 +87,7 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, boardToUpda
             boardToUpdate[i][y].team !== team
             && !king
         ) {
-            if (boardToUpdate[i][y].piece === undefined) boardToUpdate[i][y].classAdditional = "threatened"
+            if (boardToUpdate[i][y].piece === undefined || boardToUpdate[i][y].team === team) boardToUpdate[i][y].classAdditional = "threatened"
             else if (boardToUpdate[i][y].piece === "King" && boardToUpdate[i][y].team !== team) {
                 boardToUpdate[i][y].classAdditional = "threatenedKing"
                 king = true
@@ -101,14 +97,13 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, boardToUpda
             }
             y--
         }
-        if(boolean) setPiecesEvaluated(prevCount => prevCount + 1 )
     }
 
     /**
      * Calculates the possible moves for a bishop piece to check for checkmate.
      * @param {boolean} [boolean=true] - Optional parameter to indicate whether to update the count of evaluated pieces.
      */
-    function bishopJaqueMoves(boolean = true) {
+    function bishopJaqueMoves(filaIndex,columnaIndex,team,boardToUpdate) {
         let king = false
         let i = filaIndex - 1
         let y = columnaIndex + 1
@@ -122,7 +117,7 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, boardToUpda
             boardToUpdate[i][y].team !== team
             && !king
         ) {
-            if (boardToUpdate[i][y].piece === undefined) boardToUpdate[i][y].classAdditional = "threatened"
+            if (boardToUpdate[i][y].piece === undefined || boardToUpdate[i][y].team === team) boardToUpdate[i][y].classAdditional = "threatened"
             else if (boardToUpdate[i][y].piece === "King" && boardToUpdate[i][y].team !== team) {
                 boardToUpdate[i][y].classAdditional = "threatenedKing"
                 king = true
@@ -146,7 +141,7 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, boardToUpda
             boardToUpdate[i][y].team !== team
             && !king
         ) {
-            if (boardToUpdate[i][y].piece === undefined) boardToUpdate[i][y].classAdditional = "threatened"
+            if (boardToUpdate[i][y].piece === undefined || boardToUpdate[i][y].team === team) boardToUpdate[i][y].classAdditional = "threatened"
             else if (boardToUpdate[i][y].piece === "King" && boardToUpdate[i][y].team !== team) {
                 boardToUpdate[i][y].classAdditional = "threatenedKing"
                 king = true
@@ -170,7 +165,7 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, boardToUpda
             boardToUpdate[i][y].team !== team
             && !king
         ) {
-            if (boardToUpdate[i][y].piece === undefined) boardToUpdate[i][y].classAdditional = "threatened"
+            if (boardToUpdate[i][y].piece === undefined || boardToUpdate[i][y].team === team) boardToUpdate[i][y].classAdditional = "threatened"
             else if (boardToUpdate[i][y].piece === "King" && boardToUpdate[i][y].team !== team) {
                 boardToUpdate[i][y].classAdditional = "threatenedKing"
                 king = true
@@ -195,7 +190,7 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, boardToUpda
             && !king
             && !enemyPiece
         ) {
-            if (boardToUpdate[i][y].piece === undefined) boardToUpdate[i][y].classAdditional = "threatened"
+            if (boardToUpdate[i][y].piece === undefined || boardToUpdate[i][y].team === team) boardToUpdate[i][y].classAdditional = "threatened"
             else if (boardToUpdate[i][y].piece === "King" && boardToUpdate[i][y].team !== team) {
                 boardToUpdate[i][y].classAdditional = "threatenedKing"
                 king = true
@@ -206,12 +201,11 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, boardToUpda
             i++
             y--
         }
-        if(boolean) setPiecesEvaluated(prevCount => prevCount + 1 )
     }
     /**
      * Calculates the possible knight moves that can result in a check (jaque).
      */
-    function knightJaqueMoves() {
+    function knightJaqueMoves(filaIndex,columnaIndex,team,boardToUpdate) {
         const JaqueMoves = [
             { fila: -2, columna: -1 },
             { fila: -2, columna: 1 },
@@ -237,65 +231,53 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, boardToUpda
                 if (boardToUpdate[i][y].team !== team) {
                     // Asignar la clase según si está vacía o tiene una pieza para atacar
                     boardToUpdate[i][y].classAdditional = boardToUpdate[i][y].piece === "King" ? "threatenedKing" : "";
-                    boardToUpdate[i][y].classAdditional = boardToUpdate[i][y].piece === undefined ? "threatened" : "";
+                    boardToUpdate[i][y].classAdditional = !boardToUpdate[i][y].piece || boardToUpdate[i][y].team === team ? "threatened" : "";
                 }
             }
         })
-        setPiecesEvaluated(prevCount => prevCount + 1 )
     }
-    function queenJaqueMoves() {
-        rookJaqueMoves(false)
-        bishopJaqueMoves(false)
-        setPiecesEvaluated(prevCount => prevCount + 1 )
+    function queenJaqueMoves(filaIndex,columnaIndex,team,boardToUpdate) {
+        rookJaqueMoves(filaIndex,columnaIndex,team,boardToUpdate)
+        bishopJaqueMoves(filaIndex,columnaIndex,team,boardToUpdate)
     }
     /**
      * Calculates the possible moves for a pawn to put the opponent's king in check.
      */
-    function pawnJaqueMoves(){
+    function pawnJaqueMoves(filaIndex,columnaIndex,team,boardToUpdate){
         if (team === "White") {
-            let positionToEvaluate = boardToUpdate[filaIndex -1][columnaIndex]
-            if (positionToEvaluate && positionToEvaluate.piece === undefined) {
-                boardToUpdate[filaIndex - 1][columnaIndex].classAdditional = "threatened";
-                if(boardToUpdate[filaIndex][columnaIndex].firstMove){
-                    let positionToEvaluate = boardToUpdate[filaIndex -2][columnaIndex]
-                    if (positionToEvaluate && positionToEvaluate.piece === undefined) {
-                        boardToUpdate[filaIndex - 2][columnaIndex].classAdditional = "threatened";
-                    }
-                }
-            }
-            positionToEvaluate = boardToUpdate[filaIndex-1][columnaIndex+1]
-            if (positionToEvaluate && positionToEvaluate.piece === "King" && positionToEvaluate.team !== "White"){
+            let positionToEvaluate = boardToUpdate[filaIndex - 1][columnaIndex+1]
+            if (positionToEvaluate && positionToEvaluate.piece === "King" && positionToEvaluate.team !== team){
                 boardToUpdate[filaIndex-1][columnaIndex+1].classAdditional = "threatenedKing"
             }
+            else if  (positionToEvaluate && (positionToEvaluate.piece === undefined || positionToEvaluate.team === team)) {
+                boardToUpdate[filaIndex - 1][columnaIndex+1].classAdditional = "threatened";
+            }
             positionToEvaluate = boardToUpdate[filaIndex-1][columnaIndex-1]
-            if (positionToEvaluate && positionToEvaluate.piece === "King" && positionToEvaluate.team !== "White"){
+            if(positionToEvaluate && positionToEvaluate.piece === "King" && positionToEvaluate.team !== team){
                 boardToUpdate[filaIndex-1][columnaIndex-1].classAdditional = "threatenedKing"
             }
-            setPiecesEvaluated(prevCount => prevCount + 1 )
+            else if  (positionToEvaluate && (positionToEvaluate.piece === undefined || positionToEvaluate.team === team)) {
+                boardToUpdate[filaIndex - 1][columnaIndex-1].classAdditional = "threatened";
+            }
         }
         if (team === "Black") {
-            let positionToEvaluate = boardToUpdate[filaIndex + 1][columnaIndex]
-            if (positionToEvaluate && positionToEvaluate.piece === undefined) {
-                boardToUpdate[filaIndex + 1][columnaIndex].classAdditional = "threatened";
-                if(boardToUpdate[filaIndex][columnaIndex].firstMove){
-                    let positionToEvaluate = boardToUpdate[filaIndex +2][columnaIndex]
-                    if (positionToEvaluate && positionToEvaluate.piece === undefined) {
-                        boardToUpdate[filaIndex + 2][columnaIndex].classAdditional = "threatened";
-                    }
-                }
-            }
-            positionToEvaluate = boardToUpdate[filaIndex+1][columnaIndex+1]
-            if (positionToEvaluate && positionToEvaluate.piece === "King" && positionToEvaluate.team !== "Black"){
+            let positionToEvaluate = boardToUpdate[filaIndex + 1][columnaIndex+1]
+            if (positionToEvaluate && positionToEvaluate.piece === "King" && positionToEvaluate.team !== team){
                 boardToUpdate[filaIndex+1][columnaIndex+1].classAdditional = "threatenedKing"
             }
+            else if (positionToEvaluate && (positionToEvaluate.piece === undefined || positionToEvaluate.team === team)) {
+                boardToUpdate[filaIndex + 1][columnaIndex+1].classAdditional = "threatened";
+            }
             positionToEvaluate = boardToUpdate[filaIndex+1][columnaIndex-1]
-            if (positionToEvaluate && positionToEvaluate.piece === "King" && positionToEvaluate.team !== "Black"){
+            if(positionToEvaluate && positionToEvaluate.piece === "King" && positionToEvaluate.team !== team){
                 boardToUpdate[filaIndex+1][columnaIndex-1].classAdditional = "threatenedKing"
             }
-            setPiecesEvaluated(prevCount => prevCount + 1 )
+            else if (positionToEvaluate && (positionToEvaluate.piece === undefined || positionToEvaluate.team === team)) {
+                boardToUpdate[filaIndex + 1][columnaIndex-1].classAdditional = "threatened";
+            }
         }
     }
-    function kingJaqueMoves() {
+    function kingJaqueMoves(filaIndex,columnaIndex,team,boardToUpdate) {
         for (let a = -1; a < 2; a++) {
             for (let b = -1; b < 2; b++) {
                 const i = filaIndex + a;
@@ -310,8 +292,19 @@ export default function useCheckJaque(filaIndex, columnaIndex, team, boardToUpda
                 }
             }
         }
-        setPiecesEvaluated(prevCount => prevCount + 1 )
+    }
+    function checkKingJaque(filaIndex, columnaIndex,team,boardToCheck) {
+        if (team === "Black") {
+                if (boardToCheck[filaIndex][columnaIndex].classAdditional === "threatenedKing") {
+                    return(true);
+                } else return(false);
+            }
+            else {
+            if (boardToCheck[filaIndex][columnaIndex].classAdditional === "threatenedKing") {
+                return(true);
+            } else return(false);
+        }
     }
 
-    return { rookJaqueMoves, bishopJaqueMoves, knightJaqueMoves, queenJaqueMoves,pawnJaqueMoves, kingJaqueMoves}
+    return { rookJaqueMoves, bishopJaqueMoves, knightJaqueMoves, queenJaqueMoves,pawnJaqueMoves, kingJaqueMoves, checkKingJaque}
 }

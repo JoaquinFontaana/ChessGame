@@ -1,30 +1,41 @@
-import PieceWhite from "../../assets/Piece=Bishop, Side=White.png";
-import PieceBlack from "../../assets/Piece=Bishop, Side=Black.png";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState} from "react";
 import { BoardContext } from "../../context/board";
+import { PiecesContext } from "../../context/pieces";
 import useBishop from "./hooks/useBishop";
-import useCheckJaque from "../../helpers/checkJaque";
-export default function Bishop({ columnaIndex,filaIndex,team }) {
-  const src = team === "White" ? PieceWhite : PieceBlack;
-  const {jaque} = useCheckJaque()
-  const {selectedPiece} = useContext(BoardContext)
-  const {showMovements} = useBishop(filaIndex,columnaIndex,team)
-  useEffect(()=>{
-    /*if(jaque){
-      //evluar si hay movivmientos posibles const moves = checkMovements()
 
-      //Si se seleciona la pieza mostrar movimientos
-      if(selectedPiece === `${filaIndex}-${columnaIndex}`){
-        showLegalMovements()
-      }
+export default function Bishop({ columnaIndex,filaIndex,team }) {
+  const [pieceImage, setPieceImage] = useState(null);
+  useEffect(() => {
+    if (team === 'White') {
+      import("../../assets/Piece=Bishop, Side=White.png")
+        .then(image => setPieceImage(image.default));
+    } else {
+      import("../../assets/Piece=Bishop, Side=Black.png")
+        .then(image => setPieceImage(image.default));
     }
-    else */if(selectedPiece === `${filaIndex}-${columnaIndex}`){
-      showMovements()
+  }, []);
+
+  const {selectedPiece} = useContext(BoardContext)
+  const {showMovements, showLegalMovements} = useBishop(filaIndex,columnaIndex,team)
+  const {isWhiteInJaque, isBlackInJaque} = useContext(PiecesContext)
+
+
+  useEffect(() => {
+    if (selectedPiece === `${filaIndex}-${columnaIndex}`) {
+      if (team === "White"){ 
+        if(isWhiteInJaque) showLegalMovements()
+        else showMovements()
     }
-  },[selectedPiece, jaque])
-  return (
+    if (team === "Black"){ 
+      if(isBlackInJaque) showLegalMovements()
+      else showMovements()
+  }
+}
+  },[selectedPiece, isWhiteInJaque, isBlackInJaque]);
+
+    return (
     <span>
-      <img src={src} alt="Bishop" />
+      {pieceImage ? <img src={pieceImage} alt="Bishop" /> : null}
     </span>
   );
 }

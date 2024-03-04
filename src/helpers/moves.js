@@ -1,177 +1,206 @@
-export default function moves(filaIndex, columnaIndex, team, board) {
+export default function moves(filaIndex, columnaIndex, team) {
 
-    function verticalHorizontalMoves() {
-        let i = filaIndex + 1
-        let y = columnaIndex
-        let enemyPiece = false
+    function verticalHorizontalMoves(board) {
+        const moves = [];
+        let i = filaIndex + 1;
+        let y = columnaIndex;
+        let enemyPiece = false;
         while (
             i >= 0 &&
             i < board.length &&
             board[i][y] &&
-            board[i][y].team !== team
-            && !enemyPiece
+            board[i][y].team !== team &&
+            !enemyPiece
         ) {
-            if (board[i][y].piece === undefined) board[i][y].classAdditional = "available"
+            if (board[i][y].piece === undefined) moves.push({ fila: i, columna: y, classAdditional: "available" });
             else if (board[i][y].piece && board[i][y].team !== team) {
-                board[i][y].classAdditional = "attackable"
-                enemyPiece = true
+                moves.push({ fila: i, columna: y, classAdditional: "attackable" });
+                enemyPiece = true;
             }
-            i++
+            i++;
         }
-        i = filaIndex - 1
-        y = columnaIndex
-        enemyPiece = false
+        i = filaIndex - 1;
+        y = columnaIndex;
+        enemyPiece = false;
         while (
             i >= 0 &&
             i < board.length &&
             board[i][y] &&
-            board[i][y].team !== team
-            && !enemyPiece
+            board[i][y].team !== team &&
+            !enemyPiece
         ) {
-            if (board[i][y].piece === undefined) board[i][y].classAdditional = "available"
+            if (board[i][y].piece === undefined) moves.push({ fila: i, columna: y, classAdditional: "available" });
             else if (board[i][y].piece && board[i][y].team !== team) {
-                board[i][y].classAdditional = "attackable"
-                enemyPiece = true
+                moves.push({ fila: i, columna: y, classAdditional: "attackable" });
+                enemyPiece = true;
             }
-            i--
+            i--;
         }
-        i = filaIndex
-        y = columnaIndex + 1
-        enemyPiece = false
+        i = filaIndex;
+        y = columnaIndex + 1;
+        enemyPiece = false;
         while (
             y >= 0 &&
             y < board.length &&
             board[i][y] &&
-            board[i][y].team !== team
-            && !enemyPiece
+            board[i][y].team !== team &&
+            !enemyPiece
         ) {
-            if (board[i][y].piece === undefined) board[i][y].classAdditional = "available"
+            if (board[i][y].piece === undefined) moves.push({ fila: i, columna: y, classAdditional: "available" });
             else if (board[i][y].piece && board[i][y].team !== team) {
-                board[i][y].classAdditional = "attackable"
-                enemyPiece = true
+                moves.push({ fila: i, columna: y, classAdditional: "attackable" });
+                enemyPiece = true;
             }
-            y++
+            y++;
         }
-        i = filaIndex
-        y = columnaIndex - 1
-        enemyPiece = false
+        i = filaIndex;
+        y = columnaIndex - 1;
+        enemyPiece = false;
         while (
             y >= 0 &&
             y < board.length &&
             board[i][y] &&
-            board[i][y].team !== team
-            && !enemyPiece
+            board[i][y].team !== team &&
+            !enemyPiece
         ) {
-            if (board[i][y].piece === undefined) board[i][y].classAdditional = "available"
+            if (board[i][y].piece === undefined) moves.push({ fila: i, columna: y, classAdditional: "available" });
             else if (board[i][y].piece && board[i][y].team !== team) {
-                board[i][y].classAdditional = "attackable"
-                enemyPiece = true
+                moves.push({ fila: i, columna: y, classAdditional: "attackable" });
+                enemyPiece = true;
             }
-            y--
+            y--;
         }
+        return moves;
     }
 
-    function diagonalMoves() {
-        let enemyPiece = false
-        let i = filaIndex - 1
-        let y = columnaIndex + 1
+    function diagonalMoves(board) {
+        const moves = [];
+        let i = filaIndex - 1;
+        let y = columnaIndex + 1;
+        let enemyPiece = false;
         while (
             i >= 0 &&
             i < board.length &&
             y >= 0 &&
             y < board[0].length &&
             board[i][y] &&
-            board[i][y].team !== team
-            && !enemyPiece
+            board[i][y].team !== team &&
+            !enemyPiece
         ) {
-            if (board[i][y].piece === undefined) board[i][y].classAdditional = "available"
-            else if (board[i][y].piece && board[i][y].team !== team) {
-                board[i][y].classAdditional = "attackable"
-                enemyPiece = true
+            if (board[i][y].piece === undefined) {
+                moves.push({ fila: i, columna: y, classAdditional: "available" });
+            } else if (board[i][y].piece && board[i][y].team !== team) {
+                moves.push({ fila: i, columna: y, classAdditional: "attackable" });
+                enemyPiece = true;
             }
-            i--
-            y++
+            i--;
+            y++;
         }
-        i = filaIndex - 1
-        y = columnaIndex - 1
-        enemyPiece = false
+        i = filaIndex - 1;
+        y = columnaIndex - 1;
+        enemyPiece = false;
         while (
             i >= 0 &&
             i < board.length &&
             y >= 0 &&
             y < board[0].length &&
             board[i][y] &&
-            board[i][y].team !== team
-            && !enemyPiece
+            board[i][y].team !== team &&
+            !enemyPiece
         ) {
-            if (board[i][y].piece === undefined) board[i][y].classAdditional = "available"
-            else if (board[i][y].piece && board[i][y].team !== team) {
-                board[i][y].classAdditional = "attackable"
-                enemyPiece = true
+            if (board[i][y].piece === undefined) {
+                moves.push({ fila: i, columna: y, classAdditional: "available" });
+            } else if (board[i][y].piece && board[i][y].team !== team) {
+                moves.push({ fila: i, columna: y, classAdditional: "attackable" });
+                enemyPiece = true;
             }
-            i--
-            y--
+            i--;
+            y--;
         }
-        enemyPiece = false
-        i = filaIndex + 1
-        y = columnaIndex + 1
+        i = filaIndex + 1;
+        y = columnaIndex + 1;
+        enemyPiece = false;
         while (
             i >= 0 &&
             i < board.length &&
             y >= 0 &&
             y < board[0].length &&
             board[i][y] &&
-            board[i][y].team !== team
-            && !enemyPiece
+            board[i][y].team !== team &&
+            !enemyPiece
         ) {
-            if (board[i][y].piece === undefined) board[i][y].classAdditional = "available"
-            else if (board[i][y].piece && board[i][y].team !== team) {
-                board[i][y].classAdditional = "attackable"
-                enemyPiece = true
+            if (board[i][y].piece === undefined) {
+                moves.push({ fila: i, columna: y, classAdditional: "available" });
+            } else if (board[i][y].piece && board[i][y].team !== team) {
+                moves.push({ fila: i, columna: y, classAdditional: "attackable" });
+                enemyPiece = true;
             }
-            i++
-            y++
+            i++;
+            y++;
         }
-        i = filaIndex + 1
-        y = columnaIndex - 1
-        enemyPiece = false
+        i = filaIndex + 1;
+        y = columnaIndex - 1;
+        enemyPiece = false;
         while (
             i >= 0 &&
             i < board.length &&
             y >= 0 &&
             y < board[0].length &&
             board[i][y] &&
-            board[i][y].team !== team
-            && !enemyPiece
+            board[i][y].team !== team &&
+            !enemyPiece
         ) {
-            if (board[i][y].piece === undefined) board[i][y].classAdditional = "available"
-            else if (board[i][y].piece && board[i][y].team !== team) {
-                board[i][y].classAdditional = "attackable"
-                enemyPiece = true
+            if (board[i][y].piece === undefined) {
+                moves.push({ fila: i, columna: y, classAdditional: "available" });
+            } else if (board[i][y].piece && board[i][y].team !== team) {
+                moves.push({ fila: i, columna: y, classAdditional: "attackable" });
+                enemyPiece = true;
             }
-            i++
-            y--
+            i++;
+            y--;
         }
+        return moves;
     }
-    function kingMoves() {
-        for (let a = -1; a < 2; a++) {
-            for (let b = -1; b < 2; b++) {
-                const i = filaIndex + a;
-                const y = columnaIndex + b;
+    function kingMoves(board) {
+        const moves = [
+            { fila: -1, columna: -1 },
+            { fila: -1, columna: 0 },
+            { fila: -1, columna: 1 },
+            { fila: 0, columna: -1 },
+            { fila: 0, columna: 1 },
+            { fila: 1, columna: -1 },
+            { fila: 1, columna: 0 },
+            { fila: 1, columna: 1 },
+        ];
 
-                if (board[i] && board[i][y]) {
-                    if (board[i][y].piece && board[i][y].team !== team) {
-                        board[i][y].classAdditional = "attackable";
-                    } else if (board[i][y].piece === undefined) {
-                        board[i][y].classAdditional = "available";
-                    }
-                }
-            }
-        }
+        const possibleMoves = moves.filter(posiciones => {
+            const { fila, columna } = posiciones
+            const i = filaIndex + fila;
+            const y = columnaIndex + columna;
+
+            return (
+                i >= 0 &&
+                i < board.length &&
+                y >= 0 &&
+                y < board[0].length &&
+                board[i][y].team !== team
+            );
+        });
+
+        return possibleMoves.map(posiciones => {
+            const { fila, columna } = posiciones
+            const i = filaIndex + fila;
+            const y = columnaIndex + columna;
+
+            return {
+                fila: i,
+                columna: y,
+                classAdditional: board[i][y].piece ? "attackable" : "available"
+            };
+        });
     }
 
-
-    function knightMoves() {
+    function knightMoves(board) {
         const moves = [
             { fila: -2, columna: -1 },
             { fila: -2, columna: 1 },
@@ -183,65 +212,99 @@ export default function moves(filaIndex, columnaIndex, team, board) {
             { fila: 2, columna: 1 },
         ];
 
-        // Verificar cada movimiento posible
-        moves.forEach(posiciones => {
+        const possibleMoves = moves.filter(posiciones => {
             const { fila, columna } = posiciones
             const i = filaIndex + fila;
             const y = columnaIndex + columna;
-            // Verificar si la posición está dentro del tablero
-            if (i >= 0 &&
+
+            return (
+                i >= 0 &&
                 i < board.length &&
                 y >= 0 &&
-                y < board[0].length) {
-                // Verificar si la posición está vacía o tiene una pieza del equipo contrario
-                if (board[i][y].team !== team) {
-                    // Asignar la clase según si está vacía o tiene una pieza para atacar
-                    board[i][y].classAdditional = board[i][y].piece ? "attackable" : "available";
-                }
-            }
-        })
+                y < board[0].length &&
+                board[i][y].team !== team
+            );
+        });
+
+        return possibleMoves.map(posiciones => {
+            const { fila, columna } = posiciones
+            const i = filaIndex + fila;
+            const y = columnaIndex + columna;
+
+            return {
+                fila: i,
+                columna: y,
+                classAdditional: board[i][y].piece ? "attackable" : "available"
+            };
+        });
     }
-    function pawnMoves(){
+
+    function pawnMoves(board) {
+        const moves = [];
+        const attackMoves = [];
         if (team === "White") {
-            let positionToEvaluate = board[filaIndex -1][columnaIndex]
-            if (positionToEvaluate && positionToEvaluate.piece === undefined) {
-                board[filaIndex - 1][columnaIndex].classAdditional = "available";
-                if(board[filaIndex][columnaIndex].firstMove){
-                    let positionToEvaluate = board[filaIndex -2][columnaIndex]
-                    if (positionToEvaluate && positionToEvaluate.piece === undefined) {
-                        board[filaIndex - 2][columnaIndex].classAdditional = "available";
-                    }
-                }
+            moves.push({ fila: -1, columna: 0 });
+            if (board[filaIndex][columnaIndex].firstMove) {
+                moves.push({ fila: -2, columna: 0 });
             }
-            positionToEvaluate = board[filaIndex-1][columnaIndex+1]
-            if (positionToEvaluate && positionToEvaluate.piece && positionToEvaluate.team !== "White"){
-                board[filaIndex-1][columnaIndex+1].classAdditional = "attackable"
-            }
-            positionToEvaluate = board[filaIndex-1][columnaIndex-1]
-            if (positionToEvaluate && positionToEvaluate.piece && positionToEvaluate.team !== "White"){
-                board[filaIndex-1][columnaIndex-1].classAdditional = "attackable"
-            }
+            attackMoves.push({ fila: -1, columna: 1 });
+            attackMoves.push({ fila: -1, columna: -1 });
         }
         if (team === "Black") {
-            let positionToEvaluate = board[filaIndex + 1][columnaIndex]
-            if (positionToEvaluate && positionToEvaluate.piece === undefined) {
-                board[filaIndex + 1][columnaIndex].classAdditional = "available";
-                if(board[filaIndex][columnaIndex].firstMove){
-                    let positionToEvaluate = board[filaIndex +2][columnaIndex]
-                    if (positionToEvaluate && positionToEvaluate.piece === undefined) {
-                        board[filaIndex + 2][columnaIndex].classAdditional = "available";
-                    }
-                }
+            moves.push({ fila: 1, columna: 0 });
+            if (board[filaIndex][columnaIndex].firstMove) {
+                moves.push({ fila: 2, columna: 0 });
             }
-            positionToEvaluate = board[filaIndex+1][columnaIndex+1]
-            if (positionToEvaluate && positionToEvaluate.piece && positionToEvaluate.team !== "Black"){
-                board[filaIndex+1][columnaIndex+1].classAdditional = "attackable"
-            }
-            positionToEvaluate = board[filaIndex+1][columnaIndex-1]
-            if (positionToEvaluate && positionToEvaluate.piece && positionToEvaluate.team !== "Black"){
-                board[filaIndex+1][columnaIndex-1].classAdditional = "attackable"
-            }
+            attackMoves.push({ fila: 1, columna: 1 });
+            attackMoves.push({ fila: 1, columna: -1 });
         }
+
+        const possibleMoves = moves.filter(posiciones => {
+            const { fila, columna } = posiciones
+            const i = filaIndex + fila;
+            const y = columnaIndex + columna;
+
+            return (
+                i >= 0 &&
+                i < board.length &&
+                y >= 0 &&
+                y < board[0].length &&
+                board[i][y] &&
+                board[i][y].team !== team
+            );
+        });
+        const attackMovesFiltered = attackMoves.filter(posiciones => {
+            const { fila, columna } = posiciones
+            const i = filaIndex + fila;
+            const y = columnaIndex + columna;
+
+            return (
+                i >= 0 &&
+                i < board.length &&
+                y >= 0 &&
+                y < board[0].length &&
+                board[i][y] &&
+                board[i][y].team !== team &&
+                board[i][y].piece !== undefined
+            );
+        });
+        const possibleMovesMapped = possibleMoves.map(posiciones => {
+            const { fila, columna } = posiciones
+            const i = filaIndex + fila;
+            const y = columnaIndex + columna;
+            return {
+                fila: i,
+                columna: y,
+                classAdditional: board[i][y].piece ? "" : "available"
+            };
+        });
+        attackMovesFiltered.forEach(posiciones => {
+            const { fila, columna } = posiciones
+            const i = filaIndex + fila;
+            const y = columnaIndex + columna;
+            possibleMovesMapped.push({ fila: i, columna: y, classAdditional:  "attackable" });
+        });
+        return possibleMovesMapped;
     }
     return { verticalHorizontalMoves, diagonalMoves, knightMoves, kingMoves,pawnMoves }
 }

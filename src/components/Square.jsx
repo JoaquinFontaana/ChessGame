@@ -10,14 +10,18 @@ export default function Square({cellInfo,filaIndex, columnaIndex, color}) {
   const {classAdditional, team, piece} = cellInfo
   const {combinedClass,DynamicComponent,availableSquare, attackableSquare, onSelect} = useSquare(classAdditional,piece,color,filaIndex, columnaIndex, team)
   const {handleMove, board} =  useContext(BoardContext)
-  const {setWhitePieces, setBlackPieces} = useContext(PiecesContext)
+  const {setWhitePieces, setBlackPieces, whitePieces, blackPieces} = useContext(PiecesContext)
   
   function onMove(){
     if(board[filaIndex][columnaIndex].piece){
       if(board[filaIndex][columnaIndex].team === "White"){
-        setWhitePieces(prevCount => prevCount -1)
+        const newWhitePieces = whitePieces.filter((piece) => !(piece.fila === filaIndex && piece.columna === columnaIndex));
+        setWhitePieces(newWhitePieces)
       }
-      else setBlackPieces(prevCount => prevCount -1)
+      else{
+        const newBlackPieces = blackPieces.filter((piece) => !(piece.fila === filaIndex && piece.columna === columnaIndex));
+        setBlackPieces(newBlackPieces)
+      }
     }
     handleMove(filaIndex,columnaIndex)
   }
