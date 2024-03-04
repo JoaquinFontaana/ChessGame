@@ -20,10 +20,10 @@
     background-color: #e9edcc;
 }
 .square.black{
-    background-color: #779954;
+    background-color: #5384ac;
 }
 .square.activeSquare{
-    background-color: #bbcc43;
+    background-color: #a4dbee;
 }
 span img {
     cursor: pointer;

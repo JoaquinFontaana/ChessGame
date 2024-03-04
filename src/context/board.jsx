@@ -11,6 +11,7 @@ export function BoardProvider({ children }) {
     const [toggleGame, setToggleGame] = useState(false);
     const [selectedPiece, setSelectedPiece] = useState(null);
     const { setWhiteKingPosition, setBlackKingPosition, setBlackPieces, setWhitePieces, blackPieces, whitePieces,restartPieces } = useContext(PiecesContext);
+
     /**
      * Updates the chess board with a new board configuration.
      * @param {Array} newBoard - The new board configuration.
@@ -18,15 +19,15 @@ export function BoardProvider({ children }) {
     function updateBoard(newBoard) {
         setBoard(newBoard);
     }
-
     /**
      * Toggles the game state between starting and ending.
-     * @param {boolean} boolean - The boolean value indicating whether to start or end the game.
      */
     useEffect(()=>{
         if (toggleGame) {
             setTurn(TURNS.white);
-            setBoard(STARTEDBOARD);
+            //Hago una copia de la constante STARTEDBOARD para no modificar la constante original
+            const NEWSTARTEDBOARD = STARTEDBOARD.map((fila) => fila.map((columna) => ({ ...columna })))
+            setBoard(NEWSTARTEDBOARD);
         } else {
             setSelectedPiece(null);
             setTurn(null);
@@ -98,12 +99,10 @@ export function BoardProvider({ children }) {
 
             // Actualiza la posición de la pieza en el nuevo lugar
             updatedBoard[toFilaIndex][toColumnaIndex] = pieceToMove;
-            console.log(updatedBoard)
             //Evaluar si es un peon, y actualizar la propiedad firstMove
             if (pieceToMove.piece === "Pawn") {
                 updatedBoard[toFilaIndex][toColumnaIndex].firstMove = false;
             }
-
             //Actualizar el state que contiene la informacion de las piezas
             if (pieceToMove.team === "White") {
                 const newWhitePieces = whitePieces.map((piece) => ({ ...piece }));
@@ -133,7 +132,7 @@ export function BoardProvider({ children }) {
                     setBlackKingPosition({ fila: toFilaIndex, columna: toColumnaIndex })
                 }
             }
-            // Limpiar la posición anterior
+            // Limpiar la posición anterior y los estados de seleccion y clases del tablero
             updatedBoard[filaIndex][columnaIndex] = { piece: undefined, team: undefined, classAdditional: "" };
             setSelectedPiece(null);
             resetAllSquareClasses(updatedBoard);
