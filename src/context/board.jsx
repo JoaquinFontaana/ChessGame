@@ -52,8 +52,8 @@ export function BoardProvider({ children }) {
      * Resets the available movements for all chess pieces on the board.
      * @returns {Array} The updated board configuration with reseted available movements.
      */
-    function resetAvailableMovements() {
-        const resetedBoard = board.map((fila) =>
+    function resetAvailableMovements(boardToReset = board) {
+        const resetedBoard = boardToReset.map((fila) =>
             fila.map((casilla) => {
                 // Filtra las clases existentes, eliminando attackable y available
                 casilla.classAdditional = casilla.classAdditional

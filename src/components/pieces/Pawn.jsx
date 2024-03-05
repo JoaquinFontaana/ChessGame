@@ -5,13 +5,13 @@ import { PiecesContext } from "../../context/pieces";
 export default function Pawn({ columnaIndex, filaIndex, team}) {
 
   const [pieceImage, setPieceImage] = useState(null);
-
+  
   useEffect(() => {
     if (team === 'White') {
-      import("../../assets/Piece=Pawn, Side=White.png")
+      import("../../assets/Piece=Pawn, Side=White.svg")
         .then(image => setPieceImage(image.default));
     } else {
-      import("../../assets/Piece=Pawn, Side=Black.png")
+      import("../../assets/Piece=Pawn, Side=Black.svg")
         .then(image => setPieceImage(image.default));
     }
   }, [team]);
@@ -35,7 +35,7 @@ export default function Pawn({ columnaIndex, filaIndex, team}) {
 
   return (
     <span>
-      {pieceImage ? <img src={pieceImage} alt="Pawn" /> : null}
+      {pieceImage ? <img src={pieceImage} loading="lazy" alt="Pawn" /> : null}
     </span>
   );
 }

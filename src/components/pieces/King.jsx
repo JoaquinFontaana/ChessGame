@@ -7,10 +7,10 @@ export default function King({ team, filaIndex, columnaIndex }) {
   const [pieceImage, setPieceImage] = useState(null);
   useEffect(() => {
     if (team === 'White') {
-      import("../../assets/Piece=King, Side=White.png")
+      import("../../assets/Piece=King, Side=White.svg")
         .then(image => setPieceImage(image.default));
     } else {
-      import("../../assets/Piece=King, Side=Black.png")
+      import("../../assets/Piece=King, Side=Black.svg")
         .then(image => setPieceImage(image.default));
     }
   }, [team]);
@@ -34,7 +34,7 @@ export default function King({ team, filaIndex, columnaIndex }) {
 
   return (
     <span>
-      {pieceImage ? <img src={pieceImage} alt="King" /> : null}
+      {pieceImage ? <img src={pieceImage} loading="lazy" alt="King" /> : null}
     </span>
   );
 }

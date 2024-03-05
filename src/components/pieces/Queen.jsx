@@ -7,10 +7,10 @@ export default function Queen({filaIndex, columnaIndex ,team }) {
   const [pieceImage, setPieceImage] = useState(null); 
   useEffect(() => {
     if (team === 'White') {
-      import("../../assets/Piece=Queen, Side=White.png")
+      import("../../assets/Piece=Queen, Side=White.svg")
         .then(image => setPieceImage(image.default));
     } else {
-      import("../../assets/Piece=Queen, Side=Black.png")
+      import("../../assets/Piece=Queen, Side=Black.svg")
         .then(image => setPieceImage(image.default));
     }
   }, [team]);
@@ -33,7 +33,7 @@ export default function Queen({filaIndex, columnaIndex ,team }) {
   },[selectedPiece, isWhiteInJaque, isBlackInJaque]);
   return (
     <span>
-      {pieceImage ? <img src={pieceImage} alt="Queen" /> : null}
+      {pieceImage ? <img src={pieceImage} loading="lazy" alt="Queen" /> : null}
     </span>
   );
 }

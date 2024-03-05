@@ -6,11 +6,12 @@ import { PiecesContext } from "../../context/pieces";
 export default function Rook({ filaIndex,columnaIndex,team }) {
   const [pieceImage, setPieceImage] = useState(null);
   useEffect(() => {
+    if(team === undefined) return
     if (team === 'White') {
-      import("../../assets/Piece=Rook, Side=White.png")
+      import("../../assets/Piece=Rook, Side=White.svg")
         .then(image => setPieceImage(image.default));
     } else {
-      import("../../assets/Piece=Rook, Side=Black.png")
+      import("../../assets/Piece=Rook, Side=Black.svg")
         .then(image => setPieceImage(image.default));
     }
   }, [team]);
@@ -34,7 +35,7 @@ export default function Rook({ filaIndex,columnaIndex,team }) {
   },[selectedPiece, isWhiteInJaque, isBlackInJaque]);
   return (
     <span>
-      {pieceImage ? <img src={pieceImage} alt="Rook" /> : null}
+      {pieceImage ? <img src={pieceImage} loading="lazy" alt="Rook" /> : null}
     </span>
   );
 }

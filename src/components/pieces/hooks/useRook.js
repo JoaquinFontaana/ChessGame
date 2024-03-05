@@ -8,7 +8,7 @@ export default function useRook(filaIndex, columnaIndex, team) {
   const { resetAvailableMovements, board, turn } = useContext(BoardContext)
   const { verticalHorizontalMoves } = moves(filaIndex, columnaIndex, team)
   const [legalMoves, setLegalMoves] = useState([])
-  const { isBlackInJaque, isWhiteInJaque } = useContext(PiecesContext);
+  const { isBlackInJaque, isWhiteInJaque, setBlackLegalMovements,setWhiteLegalMovements} = useContext(PiecesContext);
   const { commonCheckLegalMoves, commonShowMovements, commonShowLegalMovements } = useCommomMethods(filaIndex, columnaIndex, team)
 
   useEffect(() => {
@@ -38,6 +38,16 @@ export default function useRook(filaIndex, columnaIndex, team) {
     const posibleMoves = verticalHorizontalMoves(board);
     const newLegalMoves = commonCheckLegalMoves(posibleMoves)
     setLegalMoves(newLegalMoves)
+    if(turn === 'White') setWhiteLegalMovements(prev => ({
+      ...prev,
+      legalMovements: [...prev.legalMovements, ...newLegalMoves],
+      piecesEvaluated: prev.piecesEvaluated + 1
+    }))
+    else setBlackLegalMovements(prev => ({
+      ...prev,
+      legalMovements: [...prev.legalMovements, ...newLegalMoves],
+      piecesEvaluated: prev.piecesEvaluated + 1
+    }))
   }
   return { showMovements, showLegalMovements }
 }

@@ -13,7 +13,7 @@ import useCommomMethods from "./useCommonMethods";
  * @returns {Object} An object containing the showMovements function and the jaque state.
  */
 export default function useKing(filaIndex, columnaIndex, team) {
-  const { resetAvailableMovements, turn, board } = useContext(BoardContext);
+  const { resetAvailableMovements, turn, board} = useContext(BoardContext);
   const { commonCheckLegalMoves, commonShowLegalMovements, commonShowMovements } = useCommomMethods(filaIndex, columnaIndex, team)
   const {
     whitePieces,
@@ -21,7 +21,9 @@ export default function useKing(filaIndex, columnaIndex, team) {
     setIsBlackInJaque,
     setIsWhiteInJaque,
     isWhiteInJaque,
-    isBlackInJaque
+    isBlackInJaque,
+    setWhiteLegalMovements,
+    setBlackLegalMovements
   } = useContext(PiecesContext);
 
   const {
@@ -122,7 +124,7 @@ export default function useKing(filaIndex, columnaIndex, team) {
   const { kingMoves } = moves(filaIndex, columnaIndex, team)
   function showMovements() {
     const resetedBoard = resetAvailableMovements()
-    const posibleMoves = kingMoves(resetedBoard)
+    const posibleMoves = commonCheckLegalMoves(kingMoves(resetedBoard))
     commonShowMovements(posibleMoves, resetedBoard)
   }
 
@@ -134,6 +136,16 @@ export default function useKing(filaIndex, columnaIndex, team) {
   function checkLegalMoves() {
     const newLegalMoves = commonCheckLegalMoves(kingMoves(board))
     setLegalMoves(newLegalMoves)
+    if(turn === 'White') setWhiteLegalMovements(prev => ({
+      ...prev,
+      legalMovements: [...prev.legalMovements, ...newLegalMoves],
+      piecesEvaluated: prev.piecesEvaluated + 1
+    }))
+    else setBlackLegalMovements(prev => ({
+      ...prev,
+      legalMovements: [...prev.legalMovements, ...newLegalMoves],
+      piecesEvaluated: prev.piecesEvaluated + 1
+    }))
   }
 
   return { showMovements, showLegalMovements };

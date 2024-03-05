@@ -7,10 +7,10 @@ export default function Knight({ columnaIndex,filaIndex,team }) {
   const [pieceImage, setPieceImage] = useState(null);
   useEffect(() => {
     if (team === 'White') {
-      import("../../assets/Piece=Knight, Side=White.png")
+      import("../../assets/Piece=Knight, Side=White.svg")
         .then(image => setPieceImage(image.default));
     } else {
-      import("../../assets/Piece=Knight, Side=Black.png")
+      import("../../assets/Piece=Knight, Side=Black.svg")
         .then(image => setPieceImage(image.default));
     }
   }, [team]);
@@ -34,7 +34,7 @@ export default function Knight({ columnaIndex,filaIndex,team }) {
   },[selectedPiece, isWhiteInJaque, isBlackInJaque]);
   return (
     <span>
-      {pieceImage ? <img src={pieceImage} alt="Knight" /> : null}
+      {pieceImage ? <img src={pieceImage} loading="lazy" alt="Knight" /> : null}
     </span>
   );
 }

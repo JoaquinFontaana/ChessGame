@@ -8,12 +8,12 @@ export default function Square({cellInfo,filaIndex, columnaIndex, color}) {
   const {combinedClass,DynamicComponent,availableSquare, attackableSquare, onSelect, onMove} = useSquare(classAdditional,piece,color,filaIndex, columnaIndex, team)
 
   return (
-    <Suspense>
       <div className={combinedClass} onClick={onSelect}>
+        <Suspense fallback={<span>Loading...</span>}>
         {DynamicComponent && <DynamicComponent team={team} filaIndex={filaIndex} columnaIndex={columnaIndex}/>}
+        </Suspense>
         {availableSquare && <Button handleClick={onMove} className="availableSquareButton"></Button>}
         {attackableSquare && <Button handleClick={onMove} className="attackableSquareButton"></Button>}
       </div>
-    </Suspense>
   );
 }

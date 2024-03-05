@@ -183,7 +183,8 @@ export default function moves(filaIndex, columnaIndex, team) {
                 i < board.length &&
                 y >= 0 &&
                 y < board[0].length &&
-                board[i][y].team !== team
+                board[i][y].team !== team &&
+                board[i][y].classAdditional !== "threatened"
             );
         });
 

@@ -6,7 +6,7 @@ import useCommonMethods from "./useCommonMethods";
 export default function useBishop(filaIndex, columnaIndex, team) {
   const { resetAvailableMovements, board, turn } = useContext(BoardContext);
   const [legalMoves, setLegalMoves] = useState([])
-  const { isBlackInJaque, isWhiteInJaque } = useContext(PiecesContext);
+  const { isBlackInJaque, isWhiteInJaque, setBlackLegalMovements,setWhiteLegalMovements } = useContext(PiecesContext);
 
   useEffect(() => {
     if (turn === team) {
@@ -30,7 +30,7 @@ export default function useBishop(filaIndex, columnaIndex, team) {
     const posibleMoves = diagonalMoves(resetedBoard);
     commonShowMovements(posibleMoves, resetedBoard)
   }
-  
+
   function showLegalMovements() {
     const resetedBoard = resetAvailableMovements()
     commonShowLegalMovements(legalMoves, resetedBoard)
@@ -40,6 +40,16 @@ export default function useBishop(filaIndex, columnaIndex, team) {
     const posibleMoves = diagonalMoves(board);
     const newLegalMoves = commonCheckLegalMoves(posibleMoves)
     setLegalMoves(newLegalMoves)
+    if(turn === 'White') setWhiteLegalMovements(prev => ({
+      ...prev,
+      legalMovements: [...prev.legalMovements, ...newLegalMoves],
+      piecesEvaluated: prev.piecesEvaluated + 1
+    }))
+    else setBlackLegalMovements(prev => ({
+      ...prev,
+      legalMovements: [...prev.legalMovements, ...newLegalMoves],
+      piecesEvaluated: prev.piecesEvaluated + 1
+    }))
   }
 
   return { showMovements, showLegalMovements }

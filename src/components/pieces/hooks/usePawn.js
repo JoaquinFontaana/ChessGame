@@ -8,7 +8,7 @@ export default function usePawn(columnaIndex, filaIndex, team) {
   const { commonCheckLegalMoves, commonShowMovements, commonShowLegalMovements } = useCommomMethods(filaIndex, columnaIndex, team)
   const { pawnMoves } = moves(filaIndex, columnaIndex, team)
   const [legalMoves, setLegalMoves] = useState([])
-  const { isBlackInJaque, isWhiteInJaque } = useContext(PiecesContext);
+  const { isBlackInJaque, isWhiteInJaque, setBlackLegalMovements,setWhiteLegalMovements} = useContext(PiecesContext);
 
   useEffect(() => {
     if (turn === team) {
@@ -36,6 +36,16 @@ export default function usePawn(columnaIndex, filaIndex, team) {
   function checkLegalMoves() {
     const newLegalMoves = commonCheckLegalMoves(pawnMoves(board))
     setLegalMoves(newLegalMoves)
+    if(turn === 'White') setWhiteLegalMovements(prev => ({
+      ...prev,
+      legalMovements: [...prev.legalMovements, ...newLegalMoves],
+      piecesEvaluated: prev.piecesEvaluated + 1
+    }))
+    else setBlackLegalMovements(prev => ({
+      ...prev,
+      legalMovements: [...prev.legalMovements, ...newLegalMoves],
+      piecesEvaluated: prev.piecesEvaluated + 1
+    }))
   }
   return { showMovements, showLegalMovements }
 }

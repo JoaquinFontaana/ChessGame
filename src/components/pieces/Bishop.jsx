@@ -7,10 +7,10 @@ export default function Bishop({ columnaIndex,filaIndex,team }) {
   const [pieceImage, setPieceImage] = useState(null);
   useEffect(() => {
     if (team === 'White') {
-      import("../../assets/Piece=Bishop, Side=White.png")
+      import("../../assets/Piece=Bishop, Side=White.svg")
         .then(image => setPieceImage(image.default));
     } else {
-      import("../../assets/Piece=Bishop, Side=Black.png")
+      import("../../assets/Piece=Bishop, Side=Black.svg")
         .then(image => setPieceImage(image.default));
     }
   }, []);
@@ -35,7 +35,7 @@ export default function Bishop({ columnaIndex,filaIndex,team }) {
 
     return (
     <span>
-      {pieceImage ? <img src={pieceImage} alt="Bishop" /> : null}
+      {pieceImage ? <img loading="lazy" src={pieceImage} alt="Bishop" /> : null}
     </span>
   );
 }
