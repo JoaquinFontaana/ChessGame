@@ -4,7 +4,7 @@ import moves from "../../../helpers/moves";
 import { PiecesContext } from "../../../context/pieces";
 import useCheckJaque from "../../../helpers/checkJaque";
 import useCommomMethods from "./useCommonMethods";
-
+import jaqueSound from "../../../../public/audios/jaque.mp3";
 /**
  * Custom hook for handling the behavior of a King piece in a chess game.
  * @param {number} filaIndex - The row index of the King piece on the chessboard.
@@ -13,6 +13,7 @@ import useCommomMethods from "./useCommonMethods";
  * @returns {Object} An object containing the showMovements function and the jaque state.
  */
 export default function useKing(filaIndex, columnaIndex, team) {
+  const jaqueSoundEffect = new Audio(jaqueSound);
   const { resetAvailableMovements, turn, board} = useContext(BoardContext);
   const { commonCheckLegalMoves, commonShowLegalMovements, commonShowMovements } = useCommomMethods(filaIndex, columnaIndex, team)
   const {
@@ -88,6 +89,7 @@ export default function useKing(filaIndex, columnaIndex, team) {
         });
         if (checkKingJaque(filaIndex, columnaIndex, boardToCheck)) {
           setIsWhiteInJaque(true)
+          jaqueSoundEffect.play();
         } else {
           setIsWhiteInJaque(false)
         }
@@ -114,6 +116,7 @@ export default function useKing(filaIndex, columnaIndex, team) {
         });
         if (checkKingJaque(filaIndex, columnaIndex, boardToCheck)) {
           setIsBlackInJaque(true)
+          jaqueSoundEffect.play()
         } else {
           setIsBlackInJaque(false)
         }

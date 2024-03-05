@@ -1,6 +1,8 @@
 import { createContext, useContext, useEffect, useState } from "react";
 import { BOARD, STARTEDBOARD } from "../const/BOARD";
 import TURNS from "../const/TURNS";
+import moveSound from "../../public/audios/move-self.mp3";
+import captureSound from "../../public/audios/capture.mp3";
 import { PiecesContext } from "./pieces";
 export const BoardContext = createContext();
 
@@ -10,7 +12,8 @@ export function BoardProvider({ children }) {
     const [toggleGame, setToggleGame] = useState(false);
     const [selectedPiece, setSelectedPiece] = useState(null);
     const { setWhiteKingPosition, setBlackKingPosition, setBlackPieces, setWhitePieces, blackPieces, whitePieces,restartPieces } = useContext(PiecesContext);
-
+    const moveSoundAudio = new Audio(moveSound)
+    const captureSoundAudio = new Audio(captureSound)
     /**
      * Updates the chess board with a new board configuration.
      * @param {Array} newBoard - The new board configuration.
@@ -95,13 +98,14 @@ export function BoardProvider({ children }) {
 
             // Copiar el objeto
             const pieceToMove = { ...updatedBoard[filaIndex][columnaIndex] };
-
+            if(board[toFilaIndex][toColumnaIndex].piece) captureSoundAudio.play()
+            else moveSoundAudio.play()
             // Actualiza la posición de la pieza en el nuevo lugar
             updatedBoard[toFilaIndex][toColumnaIndex] = pieceToMove;
             //Evaluar si es un peon, y actualizar la propiedad firstMove
             if (pieceToMove.piece === "Pawn") {
                 updatedBoard[toFilaIndex][toColumnaIndex].firstMove = false;
-            }
+            }   
             //Actualizar el state que contiene la informacion de las piezas
             if (pieceToMove.team === "White") {
                 const newWhitePieces = whitePieces.map((piece) => ({ ...piece }));

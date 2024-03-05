@@ -1,12 +1,12 @@
 import {useState,createContext, useEffect } from 'react';
 import BLACKPIECES from '../const/BLACKPIECES.JS';
 import WHITEPIECES from '../const/WHITEPIECES';
-
+import gameEndSound from "../../public/audios/game-end.mp3"
 const PiecesContext = createContext();
 
 
 const PiecesProvider = ({ children }) => {
-
+    const gammEndSoundEffect = new Audio(gameEndSound)
     const [isWhiteInJaque, setIsWhiteInJaque] = useState(false)
     const [isBlackInJaque, setIsBlackInJaque] = useState(false)
     const [whiteKingPosition,setWhiteKingPosition] = useState({fila:7,columna:4})
@@ -30,11 +30,17 @@ const PiecesProvider = ({ children }) => {
     useEffect(()=>{
         if(isWhiteInJaque && whiteLegalMovements.piecesEvaluated === whitePieces.length){
             console.log(whiteLegalMovements)
-            if(whiteLegalMovements.legalMovements.length === 0) setIsWhiteInJaqueMate(true)
+            if(whiteLegalMovements.legalMovements.length === 0){
+                setIsWhiteInJaqueMate(true)
+                gammEndSoundEffect.play()
+            }
             else setWhiteLegalMovements({legalMovements:[],piecesEvaluated:0})
         }
         else if(isBlackInJaque && blackLegalMovements.piecesEvaluated === blackPieces.length){
-            if(blackLegalMovements.legalMovements.length === 0) setIsBlackInJaqueMate(true)
+            if(blackLegalMovements.legalMovements.length === 0){
+                 setIsBlackInJaqueMate(true)
+                    gammEndSoundEffect.play()
+            }
             else setBlackLegalMovements({legalMovements:[],piecesEvaluated:0})
         }
     },[blackLegalMovements,whiteLegalMovements])
