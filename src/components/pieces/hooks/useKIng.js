@@ -5,6 +5,7 @@ import { PiecesContext } from "../../../context/pieces";
 import useCheckJaque from "../../../helpers/checkJaque";
 import useCommomMethods from "./useCommonMethods";
 import jaqueSound from "../../../../public/audios/jaque.mp3";
+const jaqueSoundEffect = new Audio(jaqueSound);
 /**
  * Custom hook for handling the behavior of a King piece in a chess game.
  * @param {number} filaIndex - The row index of the King piece on the chessboard.
@@ -13,7 +14,6 @@ import jaqueSound from "../../../../public/audios/jaque.mp3";
  * @returns {Object} An object containing the showMovements function and the jaque state.
  */
 export default function useKing(filaIndex, columnaIndex, team) {
-  const jaqueSoundEffect = new Audio(jaqueSound);
   const { resetAvailableMovements, turn, board} = useContext(BoardContext);
   const { commonCheckLegalMoves, commonShowLegalMovements, commonShowMovements } = useCommomMethods(filaIndex, columnaIndex, team)
   const {

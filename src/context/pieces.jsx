@@ -3,10 +3,10 @@ import BLACKPIECES from '../const/BLACKPIECES.JS';
 import WHITEPIECES from '../const/WHITEPIECES';
 import gameEndSound from "../../public/audios/game-end.mp3"
 const PiecesContext = createContext();
-
+const gammEndSoundEffect = new Audio(gameEndSound)
 
 const PiecesProvider = ({ children }) => {
-    const gammEndSoundEffect = new Audio(gameEndSound)
+    
     const [isWhiteInJaque, setIsWhiteInJaque] = useState(false)
     const [isBlackInJaque, setIsBlackInJaque] = useState(false)
     const [whiteKingPosition,setWhiteKingPosition] = useState({fila:7,columna:4})
@@ -17,6 +17,7 @@ const PiecesProvider = ({ children }) => {
     const [isBlackInJaqueMate, setIsBlackInJaqueMate] = useState(false)
     const [blackLegalMovements, setBlackLegalMovements] = useState({legalMovements:[],piecesEvaluated:0})
     const [whiteLegalMovements, setWhiteLegalMovements] = useState({legalMovements:[],piecesEvaluated:0})
+
     function restartPieces(){
         setIsBlackInJaqueMate(false)
         setIsWhiteInJaqueMate(false)

@@ -6,14 +6,15 @@ import captureSound from "../../public/audios/capture.mp3";
 import { PiecesContext } from "./pieces";
 export const BoardContext = createContext();
 
+const moveSoundAudio = new Audio(moveSound)
+const captureSoundAudio = new Audio(captureSound)
+
 export function BoardProvider({ children }) {
     const [board, setBoard] = useState(BOARD);
     const [turn, setTurn] = useState(null);
     const [toggleGame, setToggleGame] = useState(false);
     const [selectedPiece, setSelectedPiece] = useState(null);
     const { setWhiteKingPosition, setBlackKingPosition, setBlackPieces, setWhitePieces, blackPieces, whitePieces,restartPieces } = useContext(PiecesContext);
-    const moveSoundAudio = new Audio(moveSound)
-    const captureSoundAudio = new Audio(captureSound)
     /**
      * Updates the chess board with a new board configuration.
      * @param {Array} newBoard - The new board configuration.
