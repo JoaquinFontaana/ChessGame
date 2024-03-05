@@ -24,20 +24,24 @@ export default function useBishop(filaIndex, columnaIndex, team) {
   const { diagonalMoves } = moves(filaIndex, columnaIndex, team);
 
   const { commonCheckLegalMoves, commonShowMovements, commonShowLegalMovements } = useCommonMethods(filaIndex, columnaIndex, team)
+  
   function showMovements() {
     const resetedBoard = resetAvailableMovements();
     const posibleMoves = diagonalMoves(resetedBoard);
     commonShowMovements(posibleMoves, resetedBoard)
   }
+  
   function showLegalMovements() {
     const resetedBoard = resetAvailableMovements()
     commonShowLegalMovements(legalMoves, resetedBoard)
   }
+
   function checkLegalMoves() {
     const posibleMoves = diagonalMoves(board);
     const newLegalMoves = commonCheckLegalMoves(posibleMoves)
     setLegalMoves(newLegalMoves)
   }
+
   return { showMovements, showLegalMovements }
 
 }

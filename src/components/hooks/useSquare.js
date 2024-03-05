@@ -1,4 +1,5 @@
 import { BoardContext } from "../../context/board";
+import { PiecesContext } from "../../context/pieces";
 import styles from "../Board.module.css"
 import { useState, useEffect, lazy, useContext } from "react";
 /**
@@ -12,7 +13,8 @@ import { useState, useEffect, lazy, useContext } from "react";
  * @returns {Object} - An object containing the combined CSS class, dynamic component, availability status, selection handler, and attackability status.
  */
 export default function useSquare(classAdditional, piece, color, filaIndex, columnaIndex, team) {
-    const { handlePieceSelect, turn, selectedPiece} = useContext(BoardContext)
+    const { handlePieceSelect, turn, selectedPiece, board, handleMove} = useContext(BoardContext)
+    const {whitePieces,blackPieces, setWhitePieces, setBlackPieces} = useContext(PiecesContext)
     const colorClass = color === "white" ? styles.white : styles.black;
 
     const [DynamicComponent, setDynamicComponent] = useState(null);
@@ -55,5 +57,18 @@ export default function useSquare(classAdditional, piece, color, filaIndex, colu
         if (turn === team)
             handlePieceSelect(columnaIndex, filaIndex)
     }
-    return { combinedClass, DynamicComponent, availableSquare, onSelect, attackableSquare }
+    function onMove(){
+        if(board[filaIndex][columnaIndex].piece){
+          if(board[filaIndex][columnaIndex].team === "White"){
+            const newWhitePieces = whitePieces.filter((piece) => !(piece.fila === filaIndex && piece.columna === columnaIndex));
+            setWhitePieces(newWhitePieces)
+          }
+          else{
+            const newBlackPieces = blackPieces.filter((piece) => !(piece.fila === filaIndex && piece.columna === columnaIndex));
+            setBlackPieces(newBlackPieces)
+          }
+        }
+        handleMove(filaIndex,columnaIndex)
+      }
+    return { combinedClass, DynamicComponent, availableSquare, onSelect, attackableSquare, onMove }
 }

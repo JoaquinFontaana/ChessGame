@@ -244,7 +244,7 @@ export default function moves(filaIndex, columnaIndex, team) {
         const attackMoves = [];
         if (team === "White") {
             moves.push({ fila: -1, columna: 0 });
-            if (board[filaIndex][columnaIndex].firstMove) {
+            if (board[filaIndex][columnaIndex].firstMove && board[filaIndex - 1][columnaIndex].piece === undefined) {
                 moves.push({ fila: -2, columna: 0 });
             }
             attackMoves.push({ fila: -1, columna: 1 });
@@ -252,7 +252,7 @@ export default function moves(filaIndex, columnaIndex, team) {
         }
         if (team === "Black") {
             moves.push({ fila: 1, columna: 0 });
-            if (board[filaIndex][columnaIndex].firstMove) {
+            if (board[filaIndex][columnaIndex].firstMove && board[filaIndex + 1][columnaIndex].piece === undefined) {
                 moves.push({ fila: 2, columna: 0 });
             }
             attackMoves.push({ fila: 1, columna: 1 });

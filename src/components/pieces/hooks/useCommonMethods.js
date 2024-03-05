@@ -45,7 +45,6 @@ export default function useCommomMethods(filaIndex, columnaIndex, team) {
 
   /**
    * Checks the legality of the provided possible moves on jaque.
-   *
    * @param {Array} posibleMoves - The possible moves to be checked.
    * @returns {Array} An array of legal moves.
    */
