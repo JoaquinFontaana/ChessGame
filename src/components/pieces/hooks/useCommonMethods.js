@@ -1,6 +1,6 @@
 import { useContext } from "react";
 import { BoardContext } from "../../../context/board";
-import useMakeSimulatedMoves from "../../../helpers/useMakeSimulatedMoves";
+import useMakeSimulatedMoves from "./useMakeSimulatedMoves";
 
 /**
  * Custom hook that provides common methods for chess piece components.

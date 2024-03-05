@@ -37,7 +37,9 @@ const PiecesProvider = ({ children }) => {
             }
             else setWhiteLegalMovements({legalMovements:[],piecesEvaluated:0})
         }
-        else if(isBlackInJaque && blackLegalMovements.piecesEvaluated === blackPieces.length){
+        else 
+        console.log(blackLegalMovements)
+        if(isBlackInJaque && blackLegalMovements.piecesEvaluated === blackPieces.length){
             if(blackLegalMovements.legalMovements.length === 0){
                  setIsBlackInJaqueMate(true)
                     gammEndSoundEffect.play()

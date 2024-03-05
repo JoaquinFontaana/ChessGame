@@ -14,7 +14,7 @@ const jaqueSoundEffect = new Audio(jaqueSound);
  * @returns {Object} An object containing the showMovements function and the jaque state.
  */
 export default function useKing(filaIndex, columnaIndex, team) {
-  const { resetAvailableMovements, turn, board} = useContext(BoardContext);
+  const { resetAvailableMovements, turn, board } = useContext(BoardContext);
   const { commonCheckLegalMoves, commonShowLegalMovements, commonShowMovements } = useCommomMethods(filaIndex, columnaIndex, team)
   const {
     whitePieces,
@@ -27,14 +27,7 @@ export default function useKing(filaIndex, columnaIndex, team) {
     setBlackLegalMovements
   } = useContext(PiecesContext);
 
-  const {
-    kingJaqueMoves,
-    queenJaqueMoves,
-    pawnJaqueMoves,
-    knightJaqueMoves,
-    rookJaqueMoves,
-    checkKingJaque
-  } = useCheckJaque();
+  const {checkMovesOfJaque} = useCheckJaque();
 
   /**
    * Effect hook that evaluate jaque when the all enemy pieces are evaluated.
@@ -67,62 +60,18 @@ export default function useKing(filaIndex, columnaIndex, team) {
   useEffect(() => {
     if (turn && turn === team) {
       const boardToCheck = board.map((fila) => fila.map((cell) => ({ ...cell })));
-      if (team === "White") {
-        //Evaluar jaque al rey Blanco por las piezas negras
-        blackPieces.forEach((piece) => {
-          const { fila, columna } = piece
-          if (piece.piece === "King") {
-            kingJaqueMoves(fila, columna, "Black", boardToCheck);
-          }
-          else if (piece.piece === "Queen") {
-            queenJaqueMoves(fila, columna, "Black", boardToCheck);
-          }
-          else if (piece.piece === "Pawn") {
-            pawnJaqueMoves(fila, columna, "Black", boardToCheck);
-          }
-          else if (piece.piece === "Knight") {
-            knightJaqueMoves(fila, columna, "Black", boardToCheck);
-          }
-          else if (piece.piece === "Rook") {
-            rookJaqueMoves(fila, columna, "Black", boardToCheck);
-          }
-        });
-        if (checkKingJaque(filaIndex, columnaIndex, boardToCheck)) {
-          setIsWhiteInJaque(true)
-          jaqueSoundEffect.play();
-        } else {
-          setIsWhiteInJaque(false)
-        }
+      let enemyPieces = team === 'White' ? blackPieces : whitePieces;
+      if (checkMovesOfJaque(filaIndex, columnaIndex, enemyPieces, boardToCheck, team === "White" ? "Black" : "White")) {
+        if (team === "White") setIsWhiteInJaque(true)
+        else setIsBlackInJaque(true)
+        jaqueSoundEffect.play()
       }
       else {
-        //Evaluar jaque al rey negro por las piezas blanca
-        whitePieces.forEach((piece) => {
-          const { fila, columna } = piece
-          if (piece.piece === "King") {
-            kingJaqueMoves(fila, columna, "White", boardToCheck);
-          }
-          else if (piece.piece === "Queen") {
-            queenJaqueMoves(fila, columna, "White", boardToCheck);
-          }
-          else if (piece.piece === "Pawn") {
-            pawnJaqueMoves(fila, columna, "White", boardToCheck);
-          }
-          else if (piece.piece === "Knight") {
-            knightJaqueMoves(fila, columna, "White", boardToCheck);
-          }
-          else if (piece.piece === "Rook") {
-            rookJaqueMoves(fila, columna, "White", boardToCheck);
-          }
-        });
-        if (checkKingJaque(filaIndex, columnaIndex, boardToCheck)) {
-          setIsBlackInJaque(true)
-          jaqueSoundEffect.play()
-        } else {
-          setIsBlackInJaque(false)
-        }
+        if (team === "White") setIsWhiteInJaque(false)
+        else setIsBlackInJaque(false)
       }
     }
-  }, [turn]);
+  }, [turn])
 
   const { kingMoves } = moves(filaIndex, columnaIndex, team)
   function showMovements() {
@@ -139,7 +88,8 @@ export default function useKing(filaIndex, columnaIndex, team) {
   function checkLegalMoves() {
     const newLegalMoves = commonCheckLegalMoves(kingMoves(board))
     setLegalMoves(newLegalMoves)
-    if(turn === 'White') setWhiteLegalMovements(prev => ({
+
+    if (turn === 'White') setWhiteLegalMovements(prev => ({
       ...prev,
       legalMovements: [...prev.legalMovements, ...newLegalMoves],
       piecesEvaluated: prev.piecesEvaluated + 1
