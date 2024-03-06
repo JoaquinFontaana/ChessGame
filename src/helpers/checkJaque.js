@@ -221,8 +221,10 @@ export default function useCheckJaque() {
                 // Verificar si la posición está vacía o tiene una pieza del equipo contrario
                 if (boardToUpdate[i][y].team !== team) {
                     // Asignar la clase según si está vacía o tiene una pieza para atacar
-                    boardToUpdate[i][y].classAdditional = boardToUpdate[i][y].piece === "King" ? "threatenedKing" : "";
-                    boardToUpdate[i][y].classAdditional = !boardToUpdate[i][y].piece || boardToUpdate[i][y].team === team ? "threatened" : "";
+                    if(boardToUpdate[i][y].piece === "King" && boardToUpdate[i][y].team !== team) boardToUpdate[i][y].classAdditional = "threatenedKing"
+                    else if (boardToUpdate[i][y].piece === undefined || boardToUpdate[i][y].team === team) {
+                        boardToUpdate[i][y].classAdditional = "threatened";
+                    }
                 }
             }
         })
