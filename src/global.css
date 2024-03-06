@@ -83,3 +83,29 @@ button{
   border-radius: 10px;
   font-size: 15px;
 }
+@media (max-width: 600px) {
+  #root {
+    padding: 1rem;
+  }
+  main{
+    padding: 0;
+  }
+  .toogleGameButton{
+    padding: 10px 15px;
+    font-size: 15px;
+  }
+  .modal{
+    width: 200px;
+    height: 100px;
+  }
+  .modal > button{
+    padding: 5px 10px;
+    font-size: 12px;
+  }
+  .availableSquareButton{
+    padding: 7px;
+  }
+  .attackableSquareButton{
+    padding: 16px;
+  }
+}
