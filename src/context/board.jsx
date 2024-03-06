@@ -74,11 +74,11 @@ export function BoardProvider({ children }) {
      * Resets all square classes on the board.
      * @param {Array} updatedBoard - The updated board configuration.
      */
-    function resetAllSquareClasses(updatedBoard) {
-        const resetedBoard = updatedBoard.map((fila) =>
+    function resetAllSquareClasses(boardToReset) {
+        const resetedBoard = boardToReset.map((fila) =>
             fila.map((casilla) => ({ ...casilla, classAdditional: "" }))
         );
-        setBoard(resetedBoard);
+        return resetedBoard;
     }
 
     /**
@@ -139,7 +139,8 @@ export function BoardProvider({ children }) {
             // Limpiar la posición anterior y los estados de seleccion y clases del tablero
             updatedBoard[filaIndex][columnaIndex] = { piece: undefined, team: undefined, classAdditional: "" };
             setSelectedPiece(null);
-            resetAllSquareClasses(updatedBoard);
+            const resetedBoard = resetAllSquareClasses(updatedBoard);
+            updateBoard(resetedBoard);
             if (turn === TURNS.white) {
                 setTurn(TURNS.black);
             } else {
@@ -159,7 +160,8 @@ export function BoardProvider({ children }) {
                 handleMove,
                 turn: turn,
                 setToggleGame,
-                selectedPiece
+                selectedPiece,
+                resetAllSquareClasses
             }}
         >
             {children}

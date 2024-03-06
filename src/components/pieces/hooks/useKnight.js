@@ -7,7 +7,7 @@ export default function useKnight(filaIndex, columnaIndex, team) {
 
   const { resetAvailableMovements, board, turn } = useContext(BoardContext)
   const { knightMoves } = moves(filaIndex, columnaIndex, team)
-  const { isBlackInJaque, isWhiteInJaque,setWhiteLegalMovements,setBlackLegalMovements} = useContext(PiecesContext);
+  const { isBlackInJaque, isWhiteInJaque} = useContext(PiecesContext);
   const { commonCheckLegalMoves, commonShowMovements, commonShowLegalMovements } = useCommomMethods(filaIndex, columnaIndex, team)
   const [legalMoves, setLegalMoves] = useState([])
   useEffect(() => {
@@ -34,18 +34,7 @@ export default function useKnight(filaIndex, columnaIndex, team) {
     commonShowLegalMovements(legalMoves, resetedBoard)
   }
   function checkLegalMoves() {
-    const newLegalMoves = commonCheckLegalMoves(knightMoves(board))
-    setLegalMoves(newLegalMoves)
-    if(turn === 'White') setWhiteLegalMovements(prev => ({
-      ...prev,
-      legalMovements: [...prev.legalMovements, ...newLegalMoves],
-      piecesEvaluated: prev.piecesEvaluated + 1
-    }))
-    else setBlackLegalMovements(prev => ({
-      ...prev,
-      legalMovements: [...prev.legalMovements, ...newLegalMoves],
-      piecesEvaluated: prev.piecesEvaluated + 1
-    }))
+    commonCheckLegalMoves(knightMoves(board),setLegalMoves)
   }
   return { showMovements, showLegalMovements }
 }

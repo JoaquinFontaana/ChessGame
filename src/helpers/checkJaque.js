@@ -13,12 +13,13 @@ export default function useCheckJaque() {
             && !king
             && !enemyPiece
         ) {
-            if (boardToUpdate[i][y].piece === undefined || boardToUpdate[i][y].team === team) boardToUpdate[i][y].classAdditional = "threatened"
+            if (boardToUpdate[i][y].piece === undefined) boardToUpdate[i][y].classAdditional = "threatened"
             else if (boardToUpdate[i][y].piece === "King" && boardToUpdate[i][y].team !== team) {
                 boardToUpdate[i][y].classAdditional = "threatenedKing"
                 king = true
             }
             else if (boardToUpdate[i][y].piece && boardToUpdate[i][y].team !== team) {
+                boardToUpdate[i][y].classAdditional = "threatened"
                 enemyPiece = true
             }
             i++
@@ -35,12 +36,13 @@ export default function useCheckJaque() {
             && !king
             && !enemyPiece
         ) {
-            if (boardToUpdate[i][y].piece === undefined || boardToUpdate[i][y].team === team) boardToUpdate[i][y].classAdditional = "threatened"
+            if (boardToUpdate[i][y].piece === undefined) boardToUpdate[i][y].classAdditional = "threatened"
             else if (boardToUpdate[i][y].piece === "King" && boardToUpdate[i][y].team !== team) {
                 boardToUpdate[i][y].classAdditional = "threatenedKing"
                 king = true
             }
             else if (boardToUpdate[i][y].piece && boardToUpdate[i][y].team !== team) {
+                boardToUpdate[i][y].classAdditional = "threatened"
                 enemyPiece = true
             }
             i--
@@ -57,12 +59,13 @@ export default function useCheckJaque() {
             && !king
             && !enemyPiece
         ) {
-            if (boardToUpdate[i][y].piece === undefined || boardToUpdate[i][y].team === team) boardToUpdate[i][y].classAdditional = "threatened"
+            if (boardToUpdate[i][y].piece === undefined) boardToUpdate[i][y].classAdditional = "threatened"
             else if (boardToUpdate[i][y].piece === "King" && boardToUpdate[i][y].team !== team) {
                 boardToUpdate[i][y].classAdditional = "threatenedKing"
                 king = true
             }
             else if (boardToUpdate[i][y].piece && boardToUpdate[i][y].team !== team) {
+                boardToUpdate[i][y].classAdditional = "threatened"
                 enemyPiece = true
             }
             y++
@@ -79,12 +82,13 @@ export default function useCheckJaque() {
             && !king
             && !enemyPiece
         ) {
-            if (boardToUpdate[i][y].piece === undefined || boardToUpdate[i][y].team === team) boardToUpdate[i][y].classAdditional = "threatened"
+            if (boardToUpdate[i][y].piece === undefined) boardToUpdate[i][y].classAdditional = "threatened"
             else if (boardToUpdate[i][y].piece === "King" && boardToUpdate[i][y].team !== team) {
                 boardToUpdate[i][y].classAdditional = "threatenedKing"
                 king = true
             }
             else if (boardToUpdate[i][y].piece && boardToUpdate[i][y].team !== team) {
+                boardToUpdate[i][y].classAdditional = "threatened"
                 enemyPiece = true
             }
             y--
@@ -106,12 +110,13 @@ export default function useCheckJaque() {
             && !king
             && !enemyPiece
         ) {
-            if (boardToUpdate[i][y].piece === undefined || boardToUpdate[i][y].team === team) boardToUpdate[i][y].classAdditional = "threatened"
+            if (boardToUpdate[i][y].piece === undefined) boardToUpdate[i][y].classAdditional = "threatened"
             else if (boardToUpdate[i][y].piece === "King" && boardToUpdate[i][y].team !== team) {
                 boardToUpdate[i][y].classAdditional = "threatenedKing"
                 king = true
             }
             else if (boardToUpdate[i][y].piece && boardToUpdate[i][y].team !== team) {
+                boardToUpdate[i][y].classAdditional = "threatened"
                 enemyPiece = true
             }
             i--
@@ -131,12 +136,13 @@ export default function useCheckJaque() {
             && !king
             && !enemyPiece
         ) {
-            if (boardToUpdate[i][y].piece === undefined || boardToUpdate[i][y].team === team) boardToUpdate[i][y].classAdditional = "threatened"
+            if (boardToUpdate[i][y].piece === undefined) boardToUpdate[i][y].classAdditional = "threatened"
             else if (boardToUpdate[i][y].piece === "King" && boardToUpdate[i][y].team !== team) {
                 boardToUpdate[i][y].classAdditional = "threatenedKing"
                 king = true
             }
             else if (boardToUpdate[i][y].piece && boardToUpdate[i][y].team !== team) {
+                boardToUpdate[i][y].classAdditional = "threatened"
                 enemyPiece = true
             }
             i--
@@ -156,12 +162,13 @@ export default function useCheckJaque() {
             && !king
             && !enemyPiece
         ) {
-            if (boardToUpdate[i][y].piece === undefined || boardToUpdate[i][y].team === team) boardToUpdate[i][y].classAdditional = "threatened"
+            if (boardToUpdate[i][y].piece === undefined) boardToUpdate[i][y].classAdditional = "threatened"
             else if (boardToUpdate[i][y].piece === "King" && boardToUpdate[i][y].team !== team) {
                 boardToUpdate[i][y].classAdditional = "threatenedKing"
                 king = true
             }
             else if (boardToUpdate[i][y].piece && boardToUpdate[i][y].team !== team) {
+                boardToUpdate[i][y].classAdditional = "threatened"
                 enemyPiece = true
             }
             i++
@@ -181,12 +188,13 @@ export default function useCheckJaque() {
             && !king
             && !enemyPiece
         ) {
-            if (boardToUpdate[i][y].piece === undefined || boardToUpdate[i][y].team === team) boardToUpdate[i][y].classAdditional = "threatened"
+            if (boardToUpdate[i][y].piece === undefined) boardToUpdate[i][y].classAdditional = "threatened"
             else if (boardToUpdate[i][y].piece === "King" && boardToUpdate[i][y].team !== team) {
                 boardToUpdate[i][y].classAdditional = "threatenedKing"
                 king = true
             }
             else if (boardToUpdate[i][y].piece && boardToUpdate[i][y].team !== team) {
+                boardToUpdate[i][y].classAdditional = "threatened"
                 enemyPiece = true
             }
             i++
@@ -222,7 +230,7 @@ export default function useCheckJaque() {
                 if (boardToUpdate[i][y].team !== team) {
                     // Asignar la clase según si está vacía o tiene una pieza para atacar
                     if(boardToUpdate[i][y].piece === "King" && boardToUpdate[i][y].team !== team) boardToUpdate[i][y].classAdditional = "threatenedKing"
-                    else if (boardToUpdate[i][y].piece === undefined || boardToUpdate[i][y].team === team) {
+                    else if (boardToUpdate[i][y].piece === undefined || boardToUpdate[i][y].team !== team) {
                         boardToUpdate[i][y].classAdditional = "threatened";
                     }
                 }
@@ -242,14 +250,14 @@ export default function useCheckJaque() {
             if (positionToEvaluate && positionToEvaluate.piece === "King" && positionToEvaluate.team !== team) {
                 boardToUpdate[filaIndex - 1][columnaIndex + 1].classAdditional = "threatenedKing"
             }
-            else if (positionToEvaluate && (positionToEvaluate.piece === undefined || positionToEvaluate.team === team)) {
+            else if (positionToEvaluate && (positionToEvaluate.piece === undefined || positionToEvaluate.team !== team)) {
                 boardToUpdate[filaIndex - 1][columnaIndex + 1].classAdditional = "threatened";
             }
             positionToEvaluate = boardToUpdate[filaIndex - 1][columnaIndex - 1]
             if (positionToEvaluate && positionToEvaluate.piece === "King" && positionToEvaluate.team !== team) {
                 boardToUpdate[filaIndex - 1][columnaIndex - 1].classAdditional = "threatenedKing"
             }
-            else if (positionToEvaluate && (positionToEvaluate.piece === undefined || positionToEvaluate.team === team)) {
+            else if (positionToEvaluate && (positionToEvaluate.piece === undefined || positionToEvaluate.team !== team)) {
                 boardToUpdate[filaIndex - 1][columnaIndex - 1].classAdditional = "threatened";
             }
         }
@@ -258,14 +266,14 @@ export default function useCheckJaque() {
             if (positionToEvaluate && positionToEvaluate.piece === "King" && positionToEvaluate.team !== team) {
                 boardToUpdate[filaIndex + 1][columnaIndex + 1].classAdditional = "threatenedKing"
             }
-            else if (positionToEvaluate && (positionToEvaluate.piece === undefined || positionToEvaluate.team === team)) {
+            else if (positionToEvaluate && (positionToEvaluate.piece === undefined || positionToEvaluate.team !== team)) {
                 boardToUpdate[filaIndex + 1][columnaIndex + 1].classAdditional = "threatened";
             }
             positionToEvaluate = boardToUpdate[filaIndex + 1][columnaIndex - 1]
             if (positionToEvaluate && positionToEvaluate.piece === "King" && positionToEvaluate.team !== team) {
                 boardToUpdate[filaIndex + 1][columnaIndex - 1].classAdditional = "threatenedKing"
             }
-            else if (positionToEvaluate && (positionToEvaluate.piece === undefined || positionToEvaluate.team === team)) {
+            else if (positionToEvaluate && (positionToEvaluate.piece === undefined || positionToEvaluate.team !== team)) {
                 boardToUpdate[filaIndex + 1][columnaIndex - 1].classAdditional = "threatened";
             }
         }
@@ -280,7 +288,7 @@ export default function useCheckJaque() {
                 if (boardToUpdate[i] && boardToUpdate[i][y]) {
                     if (boardToUpdate[i][y].piece === "King" && boardToUpdate[i][y].team !== team) {
                         boardToUpdate[i][y].classAdditional = "threatenedKing";
-                    } else if (boardToUpdate[i][y].piece === undefined) {
+                    } else if (boardToUpdate[i][y].piece === undefined || boardToUpdate[i][y].team !== team) {
                         boardToUpdate[i][y].classAdditional = "threatened";
                     }
                 }

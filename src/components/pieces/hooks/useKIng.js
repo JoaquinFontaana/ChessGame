@@ -22,9 +22,7 @@ export default function useKing(filaIndex, columnaIndex, team) {
     setIsBlackInJaque,
     setIsWhiteInJaque,
     isWhiteInJaque,
-    isBlackInJaque,
-    setWhiteLegalMovements,
-    setBlackLegalMovements
+    isBlackInJaque
   } = useContext(PiecesContext);
 
   const {checkMovesOfJaque} = useCheckJaque();
@@ -59,9 +57,8 @@ export default function useKing(filaIndex, columnaIndex, team) {
  */
   useEffect(() => {
     if (turn && turn === team) {
-      const boardToCheck = board.map((fila) => fila.map((cell) => ({ ...cell })));
       let enemyPieces = team === 'White' ? blackPieces : whitePieces;
-      if (checkMovesOfJaque(filaIndex, columnaIndex, enemyPieces, boardToCheck, team === "White" ? "Black" : "White")) {
+      if (checkMovesOfJaque(filaIndex, columnaIndex, enemyPieces, board, team === "White" ? "Black" : "White")) {
         if (team === "White") setIsWhiteInJaque(true)
         else setIsBlackInJaque(true)
         jaqueSoundEffect.play()
@@ -76,7 +73,7 @@ export default function useKing(filaIndex, columnaIndex, team) {
   const { kingMoves } = moves(filaIndex, columnaIndex, team)
   function showMovements() {
     const resetedBoard = resetAvailableMovements()
-    const posibleMoves = commonCheckLegalMoves(kingMoves(resetedBoard))
+    const posibleMoves = commonCheckLegalMoves(kingMoves(resetedBoard),undefined,false)
     commonShowMovements(posibleMoves, resetedBoard)
   }
 
@@ -85,20 +82,8 @@ export default function useKing(filaIndex, columnaIndex, team) {
     commonShowLegalMovements(legalMoves, resetedBoard)
   }
 
-  function checkLegalMoves() {
-    const newLegalMoves = commonCheckLegalMoves(kingMoves(board))
-    setLegalMoves(newLegalMoves)
-
-    if (turn === 'White') setWhiteLegalMovements(prev => ({
-      ...prev,
-      legalMovements: [...prev.legalMovements, ...newLegalMoves],
-      piecesEvaluated: prev.piecesEvaluated + 1
-    }))
-    else setBlackLegalMovements(prev => ({
-      ...prev,
-      legalMovements: [...prev.legalMovements, ...newLegalMoves],
-      piecesEvaluated: prev.piecesEvaluated + 1
-    }))
+  function checkLegalMoves(boolean = true) {
+    commonCheckLegalMoves(kingMoves(board),setLegalMoves,boolean)
   }
 
   return { showMovements, showLegalMovements };

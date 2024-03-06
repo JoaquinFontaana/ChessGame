@@ -7,7 +7,7 @@ export default function Queen(filaIndex, columnaIndex, team) {
   const { resetAvailableMovements, board, turn } = useContext(BoardContext)
   const { verticalHorizontalMoves, diagonalMoves } = moves(filaIndex, columnaIndex, team)
   const [legalMoves, setLegalMoves] = useState([])
-  const { isBlackInJaque, isWhiteInJaque, setBlackLegalMovements,setWhiteLegalMovements } = useContext(PiecesContext);
+  const { isBlackInJaque, isWhiteInJaque} = useContext(PiecesContext);
   const { commonCheckLegalMoves, commonShowMovements, commonShowLegalMovements } = useCommonMethods(filaIndex, columnaIndex, team)
   useEffect(() => {
     if (turn === team) {
@@ -34,18 +34,7 @@ export default function Queen(filaIndex, columnaIndex, team) {
 
   function checkLegalMoves() {
     const posibleMoves = [...verticalHorizontalMoves(board), ...diagonalMoves(board)]
-    const newLegalMoves = commonCheckLegalMoves(posibleMoves)
-    setLegalMoves(newLegalMoves)
-    if(turn === 'White') setWhiteLegalMovements(prev => ({
-      ...prev,
-      legalMovements: [...prev.legalMovements, ...newLegalMoves],
-      piecesEvaluated: prev.piecesEvaluated + 1
-    }))
-    else setBlackLegalMovements(prev => ({
-      ...prev,
-      legalMovements: [...prev.legalMovements, ...newLegalMoves],
-      piecesEvaluated: prev.piecesEvaluated + 1
-    }))
+    commonCheckLegalMoves(posibleMoves,setLegalMoves)
   }
   return { showMovements, showLegalMovements }
 }
