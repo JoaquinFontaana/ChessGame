@@ -13,7 +13,7 @@ import { useState, useEffect, lazy, useContext } from "react";
  * @returns {Object} - An object containing the combined CSS class, dynamic component, availability status, selection handler, and attackability status.
  */
 export default function useSquare(classAdditional, piece, color, filaIndex, columnaIndex, team) {
-    const { handlePieceSelect, turn, selectedPiece, board, handleMove} = useContext(BoardContext)
+    const { handlePieceSelect, turn, selectedPiece, board, handleMove, doCastle} = useContext(BoardContext)
     const {whitePieces,blackPieces, setWhitePieces, setBlackPieces} = useContext(PiecesContext)
     const colorClass = color === "white" ? styles.white : styles.black;
 
@@ -24,7 +24,7 @@ export default function useSquare(classAdditional, piece, color, filaIndex, colu
     const [availableSquare, setAvailableSquare] = useState(false)
 
     const [attackableSquare, setAttackableSquare] = useState(false)
-
+    const [castleSquare, setCastleSquare] = useState(false)
     useEffect(() => {
         if (piece !== undefined && piece !== null) {
             const pieceToRender = lazy(() => import(`../pieces/${piece}.jsx`));
@@ -40,6 +40,8 @@ export default function useSquare(classAdditional, piece, color, filaIndex, colu
         else setAvailableSquare(false);
         if (classAdditional === "attackable") setAttackableSquare(true)
         else setAttackableSquare(false)
+        if(classAdditional === "castle") setCastleSquare(true)
+        else setCastleSquare(false)
     }, [classAdditional]);
 
     useEffect(()=>{
@@ -70,5 +72,8 @@ export default function useSquare(classAdditional, piece, color, filaIndex, colu
         }
         handleMove(filaIndex,columnaIndex)
       }
-    return { combinedClass, DynamicComponent, availableSquare, onSelect, attackableSquare, onMove }
+      function onCastle(){
+        doCastle(filaIndex,columnaIndex)
+      }
+    return { combinedClass, DynamicComponent, availableSquare, onSelect, attackableSquare,castleSquare ,onMove, onCastle }
 }

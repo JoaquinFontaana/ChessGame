@@ -8,6 +8,8 @@
     background-color: rgb(55, 60, 60);
     width:480px;
     height: 480px;
+    max-width: 480px;
+    max-width: 480px;
 }
 .square{
     height: 100%;

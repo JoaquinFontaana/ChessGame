@@ -25,7 +25,7 @@ export default function King({ team, filaIndex, columnaIndex }) {
         if(isWhiteInJaque) showLegalMovements()
         else showMovements()
     }
-    if (team === "Black"){ 
+    else{ 
       if(isBlackInJaque) showLegalMovements()
       else showMovements()
   }

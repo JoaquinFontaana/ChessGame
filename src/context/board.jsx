@@ -4,8 +4,10 @@ import TURNS from "../const/TURNS";
 import moveSound from "../../public/audios/move-self.mp3";
 import captureSound from "../../public/audios/capture.mp3";
 import { PiecesContext } from "./pieces";
+import parsePosition from "../helpers/parsePosition";
+import useCastle from "../components/pieces/hooks/useCastle";
 export const BoardContext = createContext();
-
+import moveLogic from "../helpers/moveLogic";
 const moveSoundAudio = new Audio(moveSound)
 const captureSoundAudio = new Audio(captureSound)
 
@@ -14,7 +16,7 @@ export function BoardProvider({ children }) {
     const [turn, setTurn] = useState(null);
     const [toggleGame, setToggleGame] = useState(false);
     const [selectedPiece, setSelectedPiece] = useState(null);
-    const { setWhiteKingPosition, setBlackKingPosition, setBlackPieces, setWhitePieces, blackPieces, whitePieces,restartPieces } = useContext(PiecesContext);
+    const { setWhiteKingPosition, setBlackKingPosition, setBlackPieces, setWhitePieces, blackPieces, whitePieces, restartPieces } = useContext(PiecesContext);
     /**
      * Updates the chess board with a new board configuration.
      * @param {Array} newBoard - The new board configuration.
@@ -22,10 +24,11 @@ export function BoardProvider({ children }) {
     function updateBoard(newBoard) {
         setBoard(newBoard);
     }
+
     /**
      * Toggles the game state between starting and ending.
      */
-    useEffect(()=>{
+    useEffect(() => {
         if (toggleGame) {
             setTurn(TURNS.white);
             //Hago una copia de la constante STARTEDBOARD para no modificar la constante original
@@ -37,7 +40,7 @@ export function BoardProvider({ children }) {
             restartPieces()
             setBoard(BOARD);
         }
-    },[toggleGame]) 
+    }, [toggleGame])
 
 
     /**
@@ -46,7 +49,7 @@ export function BoardProvider({ children }) {
      * @param {number} filaIndex - The row index of the selected piece.
      */
     function handlePieceSelect(columnaIndex, filaIndex) {
-        if (board[filaIndex][columnaIndex].piece) {
+        if (board[filaIndex][columnaIndex].piece && board[filaIndex][columnaIndex].classAdditional !== "castle") {
             const location = `${filaIndex}-${columnaIndex}`;
             setSelectedPiece(location);
         }
@@ -62,7 +65,7 @@ export function BoardProvider({ children }) {
                 // Filtra las clases existentes, eliminando attackable y available
                 casilla.classAdditional = casilla.classAdditional
                     .split(" ")
-                    .filter((clase) => clase !== "attackable" && clase !== "available")
+                    .filter((clase) => clase !== "attackable" && clase !== "available" && clase !== "castle")
                     .join(" ");
                 return casilla;
             })
@@ -81,72 +84,53 @@ export function BoardProvider({ children }) {
         return resetedBoard;
     }
 
-    /**
-     * Handles the movement of a chess piece on the board.
-     * @param {number} toFilaIndex - The row index to move the piece to.
-     * @param {number} toColumnaIndex - The column index to move the piece to.
-     */
-    function handleMove(toFilaIndex, toColumnaIndex) {
-        //Actualizar turno
-        if (selectedPiece) {
-            //Obtener fila y columa de la pieza seleccionada
-            const [fila, columna] = selectedPiece.split("-");
-            //Parsear fila y columna
-            const filaIndex = parseInt(fila, 10);
-            const columnaIndex = parseInt(columna, 10);
 
-            const updatedBoard = board.map((fila) =>(fila.map((casilla) => ({ ...casilla }))));
-
-            // Copiar el objeto
-            const pieceToMove = { ...updatedBoard[filaIndex][columnaIndex] };
-            if(board[toFilaIndex][toColumnaIndex].piece) captureSoundAudio.play()
-            else moveSoundAudio.play()
-            // Actualiza la posición de la pieza en el nuevo lugar
-            updatedBoard[toFilaIndex][toColumnaIndex] = pieceToMove;
-            //Evaluar si es un peon, y actualizar la propiedad firstMove
-            if (pieceToMove.piece === "Pawn") {
-                updatedBoard[toFilaIndex][toColumnaIndex].firstMove = false;
-            }   
-            //Actualizar el state que contiene la informacion de las piezas
-            if (pieceToMove.team === "White") {
-                const newWhitePieces = whitePieces.map((piece) => ({ ...piece }));
-                const piece = newWhitePieces.find((piece) => piece.fila === filaIndex && piece.columna === columnaIndex)
-                if(piece.piece === "Pawn"){
-                    piece.firstMove = false
-                }
-                piece.fila = toFilaIndex
-                piece.columna = toColumnaIndex
-                setWhitePieces(newWhitePieces)
-            }
-            if (pieceToMove.team === "Black") {
-                const newBlackPieces = blackPieces.map((piece) => ({ ...piece }));
-                const piece = newBlackPieces.find((piece) => piece.fila === filaIndex && piece.columna === columnaIndex)
-                if(piece.piece === "Pawn"){
-                    piece.firstMove = false
-                }
-                piece.fila = toFilaIndex
-                piece.columna = toColumnaIndex
-                setBlackPieces(newBlackPieces)
-            }
-            //Actualizar la posición del rey
-            if (pieceToMove.piece === "King") {
-                if (pieceToMove.team === "White") {
-                    setWhiteKingPosition({ fila: toFilaIndex, columna: toColumnaIndex })
-                } else {
-                    setBlackKingPosition({ fila: toFilaIndex, columna: toColumnaIndex })
-                }
-            }
-            // Limpiar la posición anterior y los estados de seleccion y clases del tablero
-            updatedBoard[filaIndex][columnaIndex] = { piece: undefined, team: undefined, classAdditional: "" };
-            setSelectedPiece(null);
-            const resetedBoard = resetAllSquareClasses(updatedBoard);
-            updateBoard(resetedBoard);
-            if (turn === TURNS.white) {
-                setTurn(TURNS.black);
-            } else {
-                setTurn(TURNS.white);
-            }
+    function newTurn(updatedBoard){
+        setSelectedPiece(null);
+        const resetedBoard = resetAllSquareClasses(updatedBoard);
+        updateBoard(resetedBoard);
+        // Cambiar el turno
+        if (turn === TURNS.white) {
+            setTurn(TURNS.black);
+        } else {
+            setTurn(TURNS.white);
         }
+        return resetedBoard
+    }
+
+    function handleMove(toFilaIndex, toColumnaIndex) {
+        if (selectedPiece) {
+            const { filaIndex, columnaIndex } = parsePosition(selectedPiece)
+
+            let boardToUpdate = board.map((fila) => (fila.map((casilla) => ({ ...casilla }))));
+
+            const updatedBoard = moveLogic(
+                boardToUpdate,
+                filaIndex,
+                columnaIndex,
+                toFilaIndex,
+                toColumnaIndex,
+                board, 
+                whitePieces, 
+                blackPieces,
+                setWhitePieces,
+                setBlackPieces,
+                setWhiteKingPosition,
+                setBlackKingPosition,
+                moveSoundAudio,
+                captureSoundAudio)
+
+                const restedBoard = newTurn(updatedBoard)
+                updateBoard(restedBoard)
+        }
+    }
+    const { handleCastle } = useCastle()
+    function doCastle(rookFilaIndex, rookColumnaIndex) {
+        const { filaIndex, columnaIndex } = parsePosition(selectedPiece)
+        const kingTeam =  board[filaIndex][columnaIndex].team
+        const updatedBoard = handleCastle(filaIndex, columnaIndex, rookColumnaIndex, board, kingTeam,setWhiteKingPosition,setBlackKingPosition)
+        const restedBoard = newTurn(updatedBoard)
+        updateBoard(restedBoard)
     }
 
     return (
@@ -161,7 +145,8 @@ export function BoardProvider({ children }) {
                 turn: turn,
                 setToggleGame,
                 selectedPiece,
-                resetAllSquareClasses
+                resetAllSquareClasses,
+                doCastle
             }}
         >
             {children}

@@ -2,9 +2,10 @@ import { useContext, useEffect, useState } from "react";
 import { BoardContext } from "../../../context/board";
 import moves from "../../../helpers/moves";
 import { PiecesContext } from "../../../context/pieces";
-import useCheckJaque from "../../../helpers/checkJaque";
+import checkJaque from "../../../helpers/checkJaque";
 import useCommomMethods from "./useCommonMethods";
 import jaqueSound from "../../../../public/audios/jaque.mp3";
+import useCastle from "./useCastle";
 const jaqueSoundEffect = new Audio(jaqueSound);
 /**
  * Custom hook for handling the behavior of a King piece in a chess game.
@@ -25,7 +26,7 @@ export default function useKing(filaIndex, columnaIndex, team) {
     isBlackInJaque
   } = useContext(PiecesContext);
 
-  const {checkMovesOfJaque} = useCheckJaque();
+  const {checkMovesOfJaque} = checkJaque();
 
   /**
    * Effect hook that evaluate jaque when the all enemy pieces are evaluated.
@@ -70,10 +71,13 @@ export default function useKing(filaIndex, columnaIndex, team) {
     }
   }, [turn])
 
+  const {showCastleMoves}= useCastle(filaIndex,columnaIndex)
   const { kingMoves } = moves(filaIndex, columnaIndex, team)
   function showMovements() {
     const resetedBoard = resetAvailableMovements()
-    const posibleMoves = commonCheckLegalMoves(kingMoves(resetedBoard),undefined,false)
+    let castleMoves = showCastleMoves(filaIndex,columnaIndex,resetedBoard)
+    let posibleMoves = commonCheckLegalMoves(kingMoves(resetedBoard),undefined,false)
+    posibleMoves = [...posibleMoves,...castleMoves]
     commonShowMovements(posibleMoves, resetedBoard)
   }
 

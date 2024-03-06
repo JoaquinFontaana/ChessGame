@@ -1,4 +1,4 @@
-export default function useCheckJaque() {
+export default function checkJaque() {
 
     function rookJaqueMoves(filaIndex, columnaIndex, team, boardToUpdate) {
         let i = filaIndex + 1
@@ -344,5 +344,5 @@ export default function useCheckJaque() {
         })
         return checkKingJaque(filaIndexKing, columnaIndexKing, boardToCheck)
     }
-    return { checkMovesOfJaque }
+    return { checkMovesOfJaque}
 }
