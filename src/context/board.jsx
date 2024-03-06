@@ -8,9 +8,10 @@ import parsePosition from "../helpers/parsePosition";
 import useCastle from "../components/pieces/hooks/useCastle";
 export const BoardContext = createContext();
 import moveLogic from "../helpers/moveLogic";
+import castleSound from "../../public/audios/castle.mp3";
 const moveSoundAudio = new Audio(moveSound)
 const captureSoundAudio = new Audio(captureSound)
-
+const castleSoundAudio = new Audio(castleSound)
 export function BoardProvider({ children }) {
     const [board, setBoard] = useState(BOARD);
     const [turn, setTurn] = useState(null);
@@ -128,6 +129,7 @@ export function BoardProvider({ children }) {
     function doCastle(rookFilaIndex, rookColumnaIndex) {
         const { filaIndex, columnaIndex } = parsePosition(selectedPiece)
         const kingTeam =  board[filaIndex][columnaIndex].team
+        castleSoundAudio.play()
         const updatedBoard = handleCastle(filaIndex, columnaIndex, rookColumnaIndex, board, kingTeam,setWhiteKingPosition,setBlackKingPosition)
         const restedBoard = newTurn(updatedBoard)
         updateBoard(restedBoard)
