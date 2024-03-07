@@ -36,8 +36,8 @@ span img {
 }
 @media (max-width: 600px) {
     .board {
-      width: 85vw;
-      height: 85vw;
+      width: 100vw;
+      height: 100vw;
     }
     span img {
         width: 70%;
