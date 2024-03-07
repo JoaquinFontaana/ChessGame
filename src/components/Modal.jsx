@@ -8,7 +8,7 @@ export default function Modal(){
     return(
         <section className="modal">
             {isWhiteInJaqueMate && <h2>Blacks won</h2>}
-            {isBlackInJaqueMate && <h2>Whites won</h2>}
+            {isBlackInJaqueMate && <h2>Whitees won</h2>}
             <Button handleClick={()=>{ setToggleGame(false)}}>Play Again</Button>
         </section>
     )
