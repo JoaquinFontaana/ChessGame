@@ -1,8 +1,5 @@
 # React Chess Game
 
-## Link
-[PLAY](https://fontaana.github.io/ChessGame/)
-
 ## Overview
 
 This is an essential chess game built with ES6, React + Vite, and CSS. The game includes all the basic functionalities required for a proper chess game. The purpose of this project was to strengthen my programming logic in JavaScript and React, and also to improve my handling of React's asynchronous states and the Context API.
@@ -15,7 +12,7 @@ This is an essential chess game built with ES6, React + Vite, and CSS. The game 
 
 ## Installation
 
-This game does not require any installation. It is hosted on a web server and can be played directly from your browser.
+This game does not require any installation. It is hosted on a web server and can be played directly from your browser [PLAY](https://fontaana.github.io/ChessGame/).
 
 ## How to Play
 
