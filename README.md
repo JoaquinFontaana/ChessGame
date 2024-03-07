@@ -12,7 +12,7 @@ This is an essential chess game built with ES6, React + Vite, and CSS. The game 
 
 ## Installation
 
-This game does not require any installation. It is hosted on a web server and can be played directly from your browser.
+This game does not require any installation. It is hosted on a web server and can be played directly from your browser [PLAY](https://fontaana.github.io/ChessGame/).
 
 ## How to Play
 
