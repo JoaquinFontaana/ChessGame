@@ -5,7 +5,7 @@ export default function useCastle() {
     let boardToCheck = []
     const { blackPieces, whitePieces } = useContext(PiecesContext)
     const { checkMovesOfJaque } = checkJaque()
-    function showCastleMoves(filaIndex,columnaIndex,board) {
+    function showCastleMoves(filaIndex, columnaIndex, board) {
         if (board[filaIndex][columnaIndex].firstMove) {
             let posibleCastleMoves = []
             if (board[filaIndex][columnaIndex].team === "White") {
@@ -73,18 +73,18 @@ export default function useCastle() {
         }
         else return []
     }
-    function handleCastle(kingFilaIndex, kingColumnaIndex, rookColumnaIndex, board, kingTeam,setWhiteKingPosition,setBlackKingPosition) {
+    function handleCastle(kingFilaIndex, kingColumnaIndex, rookColumnaIndex, board, kingTeam, setWhiteKingPosition, setBlackKingPosition) {
         const boardToUpdate = board.map((fila) => fila.map((cell) => ({ ...cell })));
         if (rookColumnaIndex === 0) {
             boardToUpdate[kingFilaIndex][2] = { ...boardToUpdate[kingFilaIndex][kingColumnaIndex] }
             boardToUpdate[kingFilaIndex][kingColumnaIndex] = { piece: undefined, team: undefined, classAdditional: "" }
             boardToUpdate[kingFilaIndex][3] = { ...boardToUpdate[kingFilaIndex][0] }
             boardToUpdate[kingFilaIndex][0] = { piece: undefined, team: undefined, classAdditional: "" }
-            if(kingTeam === "White"){
-                setWhiteKingPosition({fila:kingFilaIndex,columna:2})
+            if (kingTeam === "White") {
+                setWhiteKingPosition({ fila: kingFilaIndex, columna: 2 })
             }
-            else{
-                setBlackKingPosition({fila:kingFilaIndex,columna:2})
+            else {
+                setBlackKingPosition({ fila: kingFilaIndex, columna: 2 })
             }
         }
         else if (rookColumnaIndex === 7) {
@@ -92,14 +92,14 @@ export default function useCastle() {
             boardToUpdate[kingFilaIndex][kingColumnaIndex] = { piece: undefined, team: undefined, classAdditional: "" }
             boardToUpdate[kingFilaIndex][5] = { ...boardToUpdate[kingFilaIndex][7] }
             boardToUpdate[kingFilaIndex][7] = { piece: undefined, team: undefined, classAdditional: "" }
-            if(kingTeam === "White"){
-                setWhiteKingPosition({fila:kingFilaIndex,columna:6})
+            if (kingTeam === "White") {
+                setWhiteKingPosition({ fila: kingFilaIndex, columna: 6 })
             }
-            else{
-                setBlackKingPosition({fila:kingFilaIndex,columna:6})
+            else {
+                setBlackKingPosition({ fila: kingFilaIndex, columna: 6 })
             }
         }
         return boardToUpdate
     }
-    return { showCastleMoves,handleCastle}
+    return { showCastleMoves, handleCastle }
 }
