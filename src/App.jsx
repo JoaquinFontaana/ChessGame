@@ -14,7 +14,7 @@ function App() {
   return (
     <main>
       {(isBlackInJaqueMate || isWhiteInJaqueMate) && <Modal></Modal>}
-      {turn && <span>Turn of {turn} side</span>}
+      {turn && <span className='turn'>Turn of {turn} side</span>}
       <Board/>
       <Button className="toogleGameButton" handleClick={gameButton}>
         {toggleGame ? 'End game' : 'Start game'}
