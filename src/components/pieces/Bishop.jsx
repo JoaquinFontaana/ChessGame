@@ -13,7 +13,7 @@ export default function Bishop({ columnaIndex,filaIndex,team }) {
       import("../../assets/Piece=Bishop, Side=Black.svg")
         .then(image => setPieceImage(image.default));
     }
-  }, []);
+  }, [team]);
 
   const {selectedPiece} = useContext(BoardContext)
   const {showMovements, showLegalMovements} = useBishop(filaIndex,columnaIndex,team)
