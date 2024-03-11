@@ -1,0 +1,74 @@
+.history{
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    height: 50vw;
+    border: 1px solid #5c5c5c;
+    width: 220px;
+    margin-top: 20px;
+}
+.history h2{
+    margin: 0;
+    padding: 15px 30px;
+}
+.history ul{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    font-size: 18px;
+    overflow-y: auto;
+}
+.history ul li{
+    display: flex;
+    width: 100%;
+    align-items: center;
+    padding: 10px 15px;
+    width: 100%;
+}
+.par{
+    background-color: #585858;
+
+}
+.history ul li img{
+    width: 25px;
+    height: 25px;
+
+}
+.from{
+    margin-right: 30px;
+    margin-left: 20px;
+    cursor: pointer;
+}
+.to{
+    margin-left: 30px;
+    cursor: pointer;
+}
+.arrow{
+    display: flex;
+    align-items: center;
+}
+/* Estilo para la barra de desplazamiento */
+.history ul::-webkit-scrollbar {
+    width: 5px; /* Ancho de la barra de desplazamiento */
+}
+
+/* Estilo para el track (la parte "base" de la barra de desplazamiento) */
+.history ul::-webkit-scrollbar-track {
+    background: #f1f1f1; /* Color de fondo del track */
+}
+
+/* Estilo para el thumb (la parte móvil de la barra de desplazamiento) */
+.history ul::-webkit-scrollbar-thumb {
+    background: #888; /* Color de fondo del thumb */
+}
+
+/* Estilo para el thumb cuando se pasa el mouse por encima */
+.history ul::-webkit-scrollbar-thumb:hover {
+    background: #a53939; /* Color de fondo del thumb en hover */
+}
+@media screen and (max-width: 500px){
+    .history{
+        display: none;
+    }
+    
+}

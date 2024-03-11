@@ -9,7 +9,7 @@ import useCastle from "../components/pieces/hooks/useCastle";
 export const BoardContext = createContext();
 import handleMoveLogic from "../helpers/handleMoveLogic";
 import castleSound from "../../public/audios/castle.mp3";
-
+import updateHistory from "../helpers/updateHistory";
 const moveSoundAudio = new Audio(moveSound)
 const captureSoundAudio = new Audio(captureSound)
 const castleSoundAudio = new Audio(castleSound)
@@ -20,7 +20,7 @@ export function BoardProvider({ children }) {
     const [toggleGame, setToggleGame] = useState(false);
     const [selectedPiece, setSelectedPiece] = useState(null);
     const { setWhiteKingPosition, setBlackKingPosition, setBlackPieces, setWhitePieces, blackPieces, whitePieces, restartPieces } = useContext(PiecesContext);
-
+    const [history, setHistory] = useState([])
     /**
      * Updates the chess board with a new board configuration.
      * @param {Array} newBoard - The new board configuration.
@@ -43,6 +43,7 @@ export function BoardProvider({ children }) {
             setTurn(null);
             restartPieces()
             setBoard(BOARD);
+            setHistory([])
         }
     }, [toggleGame])
 
@@ -123,6 +124,7 @@ export function BoardProvider({ children }) {
 
             const restedBoard = newTurn(updatedBoard, setSelectedPiece, setTurn, turn)
             updateBoard(restedBoard)
+            updateHistory(filaIndex, toFilaIndex, columnaIndex, toColumnaIndex, board[filaIndex][columnaIndex].piece, board[filaIndex][columnaIndex].team,setHistory,history)
         }
     }
     const { handleCastle } = useCastle()
@@ -135,6 +137,8 @@ export function BoardProvider({ children }) {
         const restedBoard = newTurn(updatedBoard, setSelectedPiece, setTurn, turn, resetAllSquareClasses)
         updateBoard(restedBoard)
     }
+
+
 
     return (
         <BoardContext.Provider
@@ -149,7 +153,8 @@ export function BoardProvider({ children }) {
                 setToggleGame,
                 selectedPiece,
                 resetAllSquareClasses,
-                doCastle
+                doCastle,
+                history
             }}
         >
             {children}
