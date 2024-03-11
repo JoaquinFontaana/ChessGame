@@ -1,7 +1,7 @@
 import { useContext, useEffect, useState } from "react";
 import { BoardContext } from "../../../context/board";
 import { PiecesContext } from "../../../context/pieces";
-import moves from "../../../helpers/moves";
+import moves from "../helpers/moves";
 import useCommonMethods from "./useCommonMethods";
 export default function Queen(filaIndex, columnaIndex, team) {
   const { resetAvailableMovements, board, turn } = useContext(BoardContext)

@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { BoardContext } from "../../../context/board";
 import { PiecesContext } from "../../../context/pieces";
 import useCommomMethods from "./useCommonMethods";
-import moves from "../../../helpers/moves";
+import moves from "../helpers/moves";
 export default function usePawn(columnaIndex, filaIndex, team) {
   const { resetAvailableMovements, board, turn } = useContext(BoardContext)
   const { commonCheckLegalMoves, commonShowMovements, commonShowLegalMovements } = useCommomMethods(filaIndex, columnaIndex, team)

@@ -1,4 +1,4 @@
-export default function moveLogic(updatedBoard, filaIndex, columnaIndex, toFilaIndex, toColumnaIndex, board, whitePieces, blackPieces, setWhitePieces, setBlackPieces, setWhiteKingPosition, setBlackKingPosition, moveSoundAudio, captureSoundAudio) {
+export default function handleMoveLogic(updatedBoard, filaIndex, columnaIndex, toFilaIndex, toColumnaIndex, board, whitePieces, blackPieces, setWhitePieces, setBlackPieces, setWhiteKingPosition, setBlackKingPosition, moveSoundAudio, captureSoundAudio) {
     const pieceToMove = { ...updatedBoard[filaIndex][columnaIndex] };
     if (board[toFilaIndex][toColumnaIndex].piece) captureSoundAudio.play()
     else moveSoundAudio.play()

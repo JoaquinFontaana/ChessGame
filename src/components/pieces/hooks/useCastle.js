@@ -1,4 +1,4 @@
-import checkJaque from "../../../helpers/checkJaque"
+import checkJaque from "../helpers/checkJaque"
 import { useContext } from "react";
 import { PiecesContext } from "../../../context/pieces";
 export default function useCastle() {
@@ -6,6 +6,7 @@ export default function useCastle() {
     const { blackPieces, whitePieces } = useContext(PiecesContext)
     const { checkMovesOfJaque } = checkJaque()
     function showCastleMoves(filaIndex, columnaIndex, board) {
+        
         if (board[filaIndex][columnaIndex].firstMove) {
             let posibleCastleMoves = []
             if (board[filaIndex][columnaIndex].team === "White") {

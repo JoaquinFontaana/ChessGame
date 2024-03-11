@@ -1,6 +1,6 @@
 import { useState, useContext, useEffect } from "react";
 import { BoardContext } from "../../../context/board";
-import moves from "../../../helpers/moves";
+import moves from "../helpers/moves";
 import { PiecesContext } from "../../../context/pieces";
 import useCommonMethods from "./useCommonMethods";
 export default function useBishop(filaIndex, columnaIndex, team) {

@@ -7,17 +7,20 @@ import { PiecesContext } from "./pieces";
 import parsePosition from "../helpers/parsePosition";
 import useCastle from "../components/pieces/hooks/useCastle";
 export const BoardContext = createContext();
-import moveLogic from "../helpers/moveLogic";
+import handleMoveLogic from "../helpers/handleMoveLogic";
 import castleSound from "../../public/audios/castle.mp3";
+
 const moveSoundAudio = new Audio(moveSound)
 const captureSoundAudio = new Audio(captureSound)
 const castleSoundAudio = new Audio(castleSound)
+
 export function BoardProvider({ children }) {
     const [board, setBoard] = useState(BOARD);
     const [turn, setTurn] = useState(null);
     const [toggleGame, setToggleGame] = useState(false);
     const [selectedPiece, setSelectedPiece] = useState(null);
     const { setWhiteKingPosition, setBlackKingPosition, setBlackPieces, setWhitePieces, blackPieces, whitePieces, restartPieces } = useContext(PiecesContext);
+
     /**
      * Updates the chess board with a new board configuration.
      * @param {Array} newBoard - The new board configuration.
@@ -43,19 +46,6 @@ export function BoardProvider({ children }) {
         }
     }, [toggleGame])
 
-
-    /**
-     * Handles the selection of a chess piece on the board.
-     * @param {number} columnaIndex - The column index of the selected piece.
-     * @param {number} filaIndex - The row index of the selected piece.
-     */
-    function handlePieceSelect(columnaIndex, filaIndex) {
-        if (board[filaIndex][columnaIndex].piece && board[filaIndex][columnaIndex].classAdditional !== "castle") {
-            const location = `${filaIndex}-${columnaIndex}`;
-            setSelectedPiece(location);
-        }
-    }
-
     /**
      * Resets the available movements for all chess pieces on the board.
      * @returns {Array} The updated board configuration with reseted available movements.
@@ -73,20 +63,24 @@ export function BoardProvider({ children }) {
         );
         return resetedBoard;
     }
-
     /**
-     * Resets all square classes on the board.
-     * @param {Array} updatedBoard - The updated board configuration.
-     */
+ * Resets all square classes on the board.
+ * @param {Array} boardToReset - The updated board configuration.
+ */
     function resetAllSquareClasses(boardToReset) {
         const resetedBoard = boardToReset.map((fila) =>
             fila.map((casilla) => ({ ...casilla, classAdditional: "" }))
         );
         return resetedBoard;
     }
-
-
-    function newTurn(updatedBoard){
+    /**
+  * Handles the selection of a chess piece on the board.
+  * @param {number} columnaIndex - The column index of the selected piece.
+  * @param {number} filaIndex - The row index of the selected piece.
+  * @param {Array} board - The current board configuration.
+  * @param {Function} setSelectedPiece - The state setter for the selected piece.
+  */
+    function newTurn(updatedBoard) {
         setSelectedPiece(null);
         const resetedBoard = resetAllSquareClasses(updatedBoard);
         updateBoard(resetedBoard);
@@ -99,20 +93,26 @@ export function BoardProvider({ children }) {
         return resetedBoard
     }
 
+    function handlePieceSelect(columnaIndex, filaIndex) {
+        if (board[filaIndex][columnaIndex].piece && board[filaIndex][columnaIndex].classAdditional !== "castle") {
+            const location = `${filaIndex}-${columnaIndex}`;
+            setSelectedPiece(location);
+        }
+    }
     function handleMove(toFilaIndex, toColumnaIndex) {
         if (selectedPiece) {
             const { filaIndex, columnaIndex } = parsePosition(selectedPiece)
 
             let boardToUpdate = board.map((fila) => (fila.map((casilla) => ({ ...casilla }))));
 
-            const updatedBoard = moveLogic(
+            const updatedBoard = handleMoveLogic(
                 boardToUpdate,
                 filaIndex,
                 columnaIndex,
                 toFilaIndex,
                 toColumnaIndex,
-                board, 
-                whitePieces, 
+                board,
+                whitePieces,
                 blackPieces,
                 setWhitePieces,
                 setBlackPieces,
@@ -121,17 +121,18 @@ export function BoardProvider({ children }) {
                 moveSoundAudio,
                 captureSoundAudio)
 
-                const restedBoard = newTurn(updatedBoard)
-                updateBoard(restedBoard)
+            const restedBoard = newTurn(updatedBoard, setSelectedPiece, setTurn, turn)
+            updateBoard(restedBoard)
         }
     }
     const { handleCastle } = useCastle()
+
     function doCastle(rookFilaIndex, rookColumnaIndex) {
         const { filaIndex, columnaIndex } = parsePosition(selectedPiece)
-        const kingTeam =  board[filaIndex][columnaIndex].team
+        const kingTeam = board[filaIndex][columnaIndex].team
         castleSoundAudio.play()
-        const updatedBoard = handleCastle(filaIndex, columnaIndex, rookColumnaIndex, board, kingTeam,setWhiteKingPosition,setBlackKingPosition)
-        const restedBoard = newTurn(updatedBoard)
+        const updatedBoard = handleCastle(filaIndex, columnaIndex, rookColumnaIndex, board, kingTeam, setWhiteKingPosition, setBlackKingPosition)
+        const restedBoard = newTurn(updatedBoard, setSelectedPiece, setTurn, turn, resetAllSquareClasses)
         updateBoard(restedBoard)
     }
 

@@ -1,6 +1,6 @@
 import { useContext, useEffect, useState } from "react"
 import { BoardContext } from "../../../context/board"
-import moves from "../../../helpers/moves"
+import moves from "../helpers/moves";
 import { PiecesContext } from "../../../context/pieces"
 import useCommomMethods from "./useCommonMethods"
 export default function useKnight(filaIndex, columnaIndex, team) {

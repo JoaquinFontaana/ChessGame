@@ -1,8 +1,8 @@
 import { useContext, useEffect, useState } from "react";
 import { BoardContext } from "../../../context/board";
-import moves from "../../../helpers/moves";
+import moves from "../helpers/moves";
 import { PiecesContext } from "../../../context/pieces";
-import checkJaque from "../../../helpers/checkJaque";
+import checkJaque from "../helpers/checkJaque";
 import useCommomMethods from "./useCommonMethods";
 import jaqueSound from "../../../../public/audios/jaque.mp3";
 import useCastle from "./useCastle";

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import checkJaque from '../../../helpers/checkJaque';
+import checkJaque from '../helpers/checkJaque';
 import { PiecesContext } from '../../../context/pieces';
 
 export default function useMakeSimulatedMoves() {
