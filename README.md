@@ -27,10 +27,6 @@ In the future, I plan to enhance the quality of the project with features like:
 - Server-side logic with Express
 - An AI opponent with different levels of difficulty
 
-## Contributions
-
-Contributions to this project are welcome. If you have any ideas or suggestions, feel free to open an issue or submit a pull request.
-
 ## License
 
 This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for more details.
